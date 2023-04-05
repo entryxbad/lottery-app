@@ -6,19 +6,48 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
+import MaskInput from 'react-native-mask-input';
 
 const Main = () => {
   const {styles} = useStyle();
+  const [phone, setPhone] = useState();
+
+  const handleChange = masked => {
+    setPhone(masked);
+  };
 
   return (
     <View style={styles.wrapper}>
       <Text style={styles.title}>Заполните поля</Text>
       <TextInput style={styles.input} placeholder="Ваше имя"></TextInput>
-      <TextInput
+      <MaskInput
         style={styles.input}
         keyboardType="numeric"
-        placeholder="Номер телефона"></TextInput>
+        placeholder="Номер телефона"
+        value={phone}
+        onChangeText={handleChange}
+        mask={[
+          '+',
+          '7',
+          ' ',
+          '(',
+          /\d/,
+          /\d/,
+          /\d/,
+          ')',
+          ' ',
+          /\d/,
+          /\d/,
+          /\d/,
+          '-',
+          /\d/,
+          /\d/,
+          '-',
+          /\d/,
+          /\d/,
+        ]}
+      />
       <TextInput
         style={styles.input}
         placeholder="Название организации"></TextInput>
