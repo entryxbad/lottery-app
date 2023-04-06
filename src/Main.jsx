@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import MaskInput from 'react-native-mask-input';
-import {SAVE_DATA_STORAGE_KEY, setData} from './hooks';
+import {DATA_STORAGE_KEY, getData, setData} from './hooks';
 
 const Main = () => {
   const {styles} = useStyle();
@@ -33,11 +33,10 @@ const Main = () => {
     };
 
     setPersons((persons) => [...persons, newPerson]);
-    let qwerty = await setData(SAVE_DATA_STORAGE_KEY, persons);
-    console.log('AsyncStorage :', qwerty);
+    await setData(DATA_STORAGE_KEY, persons);
 
-    console.log('PERSONS', newPerson);
-    console.log('DATA', persons);
+    const qwerty = await getData(DATA_STORAGE_KEY);
+    console.log('AsyncStorage :', qwerty);
 
     Alert.alert('Спасибо за участие.');
     setName('');
@@ -45,8 +44,6 @@ const Main = () => {
     setOrganization('');
     setPost('');
   };
-
-  //console.log('DATA: ', persons);
 
   return (
     <View style={styles.wrapper}>

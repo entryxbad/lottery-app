@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const SAVE_DATA_STORAGE_KEY = 'save-data';
-export const DATA_STORAGE_KEY = 'storage-data';
+export const DATA_STORAGE_KEY = 'save-data';
 
 export const setData = async (key, value) => {
   try {
