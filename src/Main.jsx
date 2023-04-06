@@ -1,4 +1,5 @@
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -8,19 +9,57 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import MaskInput from 'react-native-mask-input';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  DATA_STORAGE_KEY,
+  SAVE_DATA_STORAGE_KEY,
+  getData,
+  setData,
+} from './hooks';
 
 const Main = () => {
   const {styles} = useStyle();
+  const [name, setName] = useState();
   const [phone, setPhone] = useState();
+  const [organization, setOrganization] = useState();
+  const [post, setPost] = useState();
 
-  const handleChange = masked => {
+  const personData = async () => {
+    let newPerson = {
+      name: name,
+      phone: phone,
+      organization: organization,
+      post: post,
+    };
+
+    newPerson = await setData(SAVE_DATA_STORAGE_KEY, newPerson);
+    console.log(`DB: ${newPerson}`);
+    console.log('DATA: ', await getData(DATA_STORAGE_KEY));
+  };
+
+  const handleChange = (masked, newPhone) => {
     setPhone(masked);
+    setPhone(newPhone);
+  };
+
+  const handleSubmt = () => {
+    personData();
+
+    Alert.alert('Спасибо за участие.');
+    setName('');
+    setPhone('');
+    setOrganization('');
+    setPost('');
   };
 
   return (
     <View style={styles.wrapper}>
       <Text style={styles.title}>Заполните поля</Text>
-      <TextInput style={styles.input} placeholder="Ваше имя"></TextInput>
+      <TextInput
+        style={styles.input}
+        value={name}
+        onChangeText={(newName) => setName(newName)}
+        placeholder="Ваше имя"></TextInput>
       <MaskInput
         style={styles.input}
         keyboardType="numeric"
@@ -50,9 +89,15 @@ const Main = () => {
       />
       <TextInput
         style={styles.input}
+        value={organization}
+        onChangeText={(newOrganization) => setOrganization(newOrganization)}
         placeholder="Название организации"></TextInput>
-      <TextInput style={styles.input} placeholder="Ваша должность"></TextInput>
-      <TouchableOpacity style={styles.btn}>
+      <TextInput
+        style={styles.input}
+        value={post}
+        onChangeText={(newPost) => setPost(newPost)}
+        placeholder="Ваша должность"></TextInput>
+      <TouchableOpacity style={styles.btn} onPress={handleSubmt}>
         <Text style={styles.btnText}>Записать</Text>
       </TouchableOpacity>
     </View>
