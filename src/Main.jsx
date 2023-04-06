@@ -9,41 +9,35 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import MaskInput from 'react-native-mask-input';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  DATA_STORAGE_KEY,
-  SAVE_DATA_STORAGE_KEY,
-  getData,
-  setData,
-} from './hooks';
+import {SAVE_DATA_STORAGE_KEY, setData} from './hooks';
 
 const Main = () => {
   const {styles} = useStyle();
+  const [persons, setPersons] = useState([]);
   const [name, setName] = useState();
   const [phone, setPhone] = useState();
   const [organization, setOrganization] = useState();
   const [post, setPost] = useState();
-
-  const personData = async () => {
-    let newPerson = {
-      name: name,
-      phone: phone,
-      organization: organization,
-      post: post,
-    };
-
-    newPerson = await setData(SAVE_DATA_STORAGE_KEY, newPerson);
-    console.log(`DB: ${newPerson}`);
-    console.log('DATA: ', await getData(DATA_STORAGE_KEY));
-  };
 
   const handleChange = (masked, newPhone) => {
     setPhone(masked);
     setPhone(newPhone);
   };
 
-  const handleSubmt = () => {
-    personData();
+  const handleSubmt = async () => {
+    const newPerson = {
+      name: name,
+      phone: phone,
+      organization: organization,
+      post: post,
+    };
+
+    setPersons((persons) => [...persons, newPerson]);
+    let qwerty = await setData(SAVE_DATA_STORAGE_KEY, persons);
+    console.log('AsyncStorage :', qwerty);
+
+    console.log('PERSONS', newPerson);
+    console.log('DATA', persons);
 
     Alert.alert('Спасибо за участие.');
     setName('');
@@ -51,6 +45,8 @@ const Main = () => {
     setOrganization('');
     setPost('');
   };
+
+  //console.log('DATA: ', persons);
 
   return (
     <View style={styles.wrapper}>
