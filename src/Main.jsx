@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import MaskInput from 'react-native-mask-input';
-import {DATA_STORAGE_KEY, getData, saveData, setData} from './hooks';
+import {DATA_STORAGE_KEY, getData, getWinner, saveData, setData} from './hooks';
 
 const Main = () => {
   const {styles} = useStyle();
@@ -96,6 +96,9 @@ const Main = () => {
       <TouchableOpacity style={styles.btn} onPress={saveData}>
         <Text style={styles.btnText}>Сохранить</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.btn} onPress={getWinner}>
+        <Text style={styles.btnText}>Победитель</Text>
+      </TouchableOpacity>
     </KeyboardAvoidingView>
   );
 };
@@ -130,7 +133,7 @@ const useStyle = () => {
       borderRadius: 10,
       alignItems: 'center',
       padding: 10,
-      marginTop: 85,
+      marginTop: 10,
     },
     btnText: {
       fontSize: width * 0.03,
