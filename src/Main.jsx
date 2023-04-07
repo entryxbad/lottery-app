@@ -1,15 +1,15 @@
 import {
   Alert,
+  KeyboardAvoidingView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
   useWindowDimensions,
 } from 'react-native';
 import React, {useState} from 'react';
 import MaskInput from 'react-native-mask-input';
-import {DATA_STORAGE_KEY, getData, setData} from './hooks';
+import {DATA_STORAGE_KEY, getData, saveData, setData} from './hooks';
 
 const Main = () => {
   const {styles} = useStyle();
@@ -46,7 +46,7 @@ const Main = () => {
   };
 
   return (
-    <View style={styles.wrapper}>
+    <KeyboardAvoidingView style={styles.wrapper} behavior="padding">
       <Text style={styles.title}>Заполните поля</Text>
       <TextInput
         style={styles.input}
@@ -93,7 +93,10 @@ const Main = () => {
       <TouchableOpacity style={styles.btn} onPress={handleSubmt}>
         <Text style={styles.btnText}>Записать</Text>
       </TouchableOpacity>
-    </View>
+      <TouchableOpacity style={styles.btn} onPress={saveData}>
+        <Text style={styles.btnText}>Сохранить</Text>
+      </TouchableOpacity>
+    </KeyboardAvoidingView>
   );
 };
 

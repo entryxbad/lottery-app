@@ -1,5 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+var RNFS = require('react-native-fs');
+var path = RNFS.ExternalDirectoryPath + '/test.txt';
+
 export const DATA_STORAGE_KEY = 'save-data';
 
 export const setData = async (key, value) => {
@@ -18,4 +21,14 @@ export const getData = async (key) => {
   } catch (error) {
     console.log('Ошибка чтения данных');
   }
+};
+
+export const saveData = async () => {
+  RNFS.writeFile(path, JSON.stringify(await getData(DATA_STORAGE_KEY)), 'utf8')
+    .then((success) => {
+      console.log('FILE WRITTEN!');
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
 };
