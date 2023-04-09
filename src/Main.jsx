@@ -102,7 +102,12 @@ const Main = () => {
       <TouchableOpacity style={styles.btn} onPress={saveData}>
         <Text style={styles.btnText}>Сохранить</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.btn} onPress={getWinner}>
+      <TouchableOpacity
+        style={styles.btn}
+        onPress={async () => {
+          const result = await getWinner();
+          console.log(`RESULT: ${result}`);
+        }}>
         <Text style={styles.btnText}>Победитель</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
