@@ -9,7 +9,13 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import MaskInput from 'react-native-mask-input';
-import {DATA_STORAGE_KEY, getData, getWinner, saveData, setData} from './hooks';
+import {
+  DATA_STORAGE_KEY,
+  getData,
+  getWinner,
+  saveData,
+  setData,
+} from './functions';
 
 const Main = () => {
   const {styles} = useStyle();
