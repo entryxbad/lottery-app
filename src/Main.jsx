@@ -144,7 +144,7 @@ const useStyle = () => {
     settings: {
       position: 'absolute',
       color: '#fff',
-      left: width * 0.4,
+      left: width * 0.42,
       bottom: width * 0.01,
     },
   });

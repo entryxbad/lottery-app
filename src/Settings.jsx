@@ -6,9 +6,9 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import React from 'react';
-import {getWinner, saveData} from './functions';
+import {saveData} from './functions';
 
-const Settings = () => {
+const Settings = ({navigation}) => {
   const {styles} = useStyle();
 
   return (
@@ -18,11 +18,8 @@ const Settings = () => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.btn}
-        onPress={async () => {
-          const result = await getWinner();
-          console.log(`RESULT: ${result}`);
-        }}>
-        <Text style={styles.btnText}>Победитель</Text>
+        onPress={() => navigation.navigate('Winner')}>
+        <Text style={styles.btnText}>Розыгрыш</Text>
       </TouchableOpacity>
     </View>
   );
@@ -42,16 +39,6 @@ const useStyle = () => {
       width: width,
       height: height,
     },
-    title: {
-      fontSize: width * 0.04,
-      marginBottom: 50,
-    },
-    input: {
-      backgroundColor: '#fff',
-      margin: 10,
-      borderRadius: 10,
-      width: '50%',
-    },
     btn: {
       width: '30%',
       backgroundColor: '#3870c9',
@@ -63,11 +50,6 @@ const useStyle = () => {
     btnText: {
       fontSize: width * 0.03,
       color: '#fff',
-    },
-    settings: {
-      position: 'absolute',
-      color: '#fff',
-      left: width * 0.4,
     },
   });
   return {styles};

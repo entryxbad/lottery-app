@@ -32,17 +32,3 @@ export const saveData = async () => {
       console.log(err.message);
     });
 };
-
-export const getWinner = async () => {
-  const data = await getData(DATA_STORAGE_KEY);
-
-  let names = [];
-  let randomName = [];
-  for (let i = 0; i < data.length; i++) {
-    names.push(data[i].name);
-    randomName = Math.floor(Math.random() * names.length);
-  }
-  console.log(names);
-  console.log(names[randomName]);
-  return names;
-};
