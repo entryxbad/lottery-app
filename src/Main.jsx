@@ -9,15 +9,10 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import MaskInput from 'react-native-mask-input';
-import {
-  DATA_STORAGE_KEY,
-  getData,
-  getWinner,
-  saveData,
-  setData,
-} from './functions';
+import {DATA_STORAGE_KEY, getData, setData} from './functions';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
-const Main = () => {
+const Main = ({navigation}) => {
   const {styles} = useStyle();
   const [persons, setPersons] = useState([]);
   const [name, setName] = useState();
@@ -53,6 +48,13 @@ const Main = () => {
 
   return (
     <KeyboardAvoidingView style={styles.wrapper} behavior="padding">
+      <TouchableOpacity>
+        <Icon
+          style={styles.settings}
+          name="settings"
+          size={50}
+          onPress={() => navigation.navigate('Settings')}></Icon>
+      </TouchableOpacity>
       <Text style={styles.title}>Заполните поля</Text>
       <TextInput
         style={styles.input}
@@ -99,17 +101,6 @@ const Main = () => {
       <TouchableOpacity style={styles.btn} onPress={handleSubmt}>
         <Text style={styles.btnText}>Записать</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.btn} onPress={saveData}>
-        <Text style={styles.btnText}>Сохранить</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.btn}
-        onPress={async () => {
-          const result = await getWinner();
-          console.log(`RESULT: ${result}`);
-        }}>
-        <Text style={styles.btnText}>Победитель</Text>
-      </TouchableOpacity>
     </KeyboardAvoidingView>
   );
 };
@@ -144,11 +135,17 @@ const useStyle = () => {
       borderRadius: 10,
       alignItems: 'center',
       padding: 10,
-      marginTop: 10,
+      marginTop: 50,
     },
     btnText: {
       fontSize: width * 0.03,
       color: '#fff',
+    },
+    settings: {
+      position: 'absolute',
+      color: '#fff',
+      left: width * 0.4,
+      bottom: width * 0.01,
     },
   });
   return {styles};
