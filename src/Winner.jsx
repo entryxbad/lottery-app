@@ -62,9 +62,7 @@ const Winner = () => {
           <Modal onRequestClose={() => setIsModalVisible(false)}>
             <KeyboardAvoidingView style={styles.wrapper}>
               <Text style={styles.title}>Введите количество победителей</Text>
-              <Text style={styles.text}>
-                Количество участников: {regAmount}
-              </Text>
+              <Text style={styles.text}>Всего участников: {regAmount}</Text>
               <TextInput
                 style={styles.input}
                 value={amount}

@@ -1,3 +1,4 @@
+import React, {useState} from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -7,7 +8,6 @@ import {
   TouchableOpacity,
   useWindowDimensions,
 } from 'react-native';
-import React, {useState} from 'react';
 import MaskInput from 'react-native-mask-input';
 import {DATA_STORAGE_KEY, getData, setData} from './functions';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
@@ -25,7 +25,7 @@ const Main = ({navigation}) => {
     setPhone(newPhone);
   };
 
-  const handleSubmt = async () => {
+  const handleSubmit = async () => {
     const newPerson = {
       name: name,
       phone: phone,
@@ -33,8 +33,13 @@ const Main = ({navigation}) => {
       post: post,
     };
 
-    setPersons((persons) => [...persons, newPerson]);
-    await setData(DATA_STORAGE_KEY, persons);
+    if (!name || !phone || !organization || !post) {
+      Alert.alert('Пожалуйста. Заполните все поля.');
+      return;
+    }
+
+    setPersons((prevPersons) => [...prevPersons, newPerson]);
+    await setData(DATA_STORAGE_KEY, [...persons, newPerson]);
 
     const qwerty = await getData(DATA_STORAGE_KEY);
     console.log('AsyncStorage :', qwerty);
@@ -48,12 +53,8 @@ const Main = ({navigation}) => {
 
   return (
     <KeyboardAvoidingView style={styles.wrapper} behavior="padding">
-      <TouchableOpacity>
-        <Icon
-          style={styles.settings}
-          name="settings"
-          size={50}
-          onPress={() => navigation.navigate('Settings')}></Icon>
+      <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+        <Icon style={styles.settings} name="settings" size={50}></Icon>
       </TouchableOpacity>
       <Text style={styles.title}>Заполните поля</Text>
       <TextInput
@@ -98,7 +99,7 @@ const Main = ({navigation}) => {
         value={post}
         onChangeText={(newPost) => setPost(newPost)}
         placeholder="Ваша должность"></TextInput>
-      <TouchableOpacity style={styles.btn} onPress={handleSubmt}>
+      <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
         <Text style={styles.btnText}>Записать</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
