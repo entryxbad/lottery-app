@@ -122,6 +122,7 @@ const useStyle = () => {
     title: {
       fontSize: width * 0.04,
       marginBottom: 50,
+      color: '#fff',
     },
     input: {
       backgroundColor: '#fff',
