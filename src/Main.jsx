@@ -125,7 +125,7 @@ const useStyle = () => {
       height: height,
     },
     title: {
-      fontSize: width * 0.04,
+      fontSize: width * 0.05,
       marginBottom: 50,
       color: '#fff',
     },
@@ -133,10 +133,10 @@ const useStyle = () => {
       backgroundColor: '#fff',
       margin: 10,
       borderRadius: 10,
-      width: '50%',
+      width: width * 0.5,
     },
     btn: {
-      width: '30%',
+      width: width * 0.3,
       backgroundColor: '#005082',
       borderRadius: 10,
       alignItems: 'center',

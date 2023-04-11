@@ -44,7 +44,7 @@ const useStyle = () => {
       height: height,
     },
     btn: {
-      width: '30%',
+      width: width * 0.3,
       backgroundColor: '#103977',
       borderRadius: 10,
       alignItems: 'center',

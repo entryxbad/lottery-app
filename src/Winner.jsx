@@ -123,7 +123,6 @@ const useStyle = () => {
   const styles = StyleSheet.create({
     wrapper: {
       display: 'flex',
-
       justifyContent: 'center',
       alignItems: 'center',
       width: width,
@@ -135,7 +134,7 @@ const useStyle = () => {
       color: '#fff',
     },
     btn: {
-      width: '30%',
+      width: width * 0.3,
       backgroundColor: '#154f6a',
       borderRadius: 10,
       alignItems: 'center',
@@ -147,7 +146,7 @@ const useStyle = () => {
       color: '#fff',
     },
     text: {
-      fontSize: width * 0.025,
+      fontSize: width * 0.028,
       color: '#fff',
       marginTop: 50,
     },
@@ -155,7 +154,7 @@ const useStyle = () => {
       backgroundColor: '#fff',
       margin: 10,
       borderRadius: 10,
-      width: '50%',
+      width: width * 0.5,
     },
     backgroundImage: {
       flex: 1,
