@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import {DATA_STORAGE_KEY, getData} from './functions';
+import Confetti from 'react-native-confetti';
 
 const Winner = () => {
   const {styles} = useStyle();
@@ -18,6 +19,7 @@ const Winner = () => {
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [amount, setAmount] = useState('');
   const [regAmount, setRegAmount] = useState('');
+  const confettiRef = useRef(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -51,6 +53,13 @@ const Winner = () => {
       result = result.filter((v, i, arr) => arr.indexOf(v) == i);
     }
 
+    if (confettiRef.current) {
+      confettiRef.current.startConfetti();
+      setTimeout(() => {
+        confettiRef.current.stopConfetti();
+      }, 10000); // остановка конфетти через 3 секунды
+    }
+
     setData(result);
     return result;
   };
@@ -60,7 +69,7 @@ const Winner = () => {
       <View>
         {isModalVisible && (
           <Modal onRequestClose={() => setIsModalVisible(false)}>
-            <KeyboardAvoidingView style={styles.wrapper}>
+            <KeyboardAvoidingView style={styles.wrapper} behavior="padding">
               <Text style={styles.title}>Введите количество победителей</Text>
               <Text style={styles.text}>Всего участников: {regAmount}</Text>
               <TextInput
@@ -81,6 +90,7 @@ const Winner = () => {
           <Text style={styles.btnText}>Разыграть</Text>
         </TouchableOpacity>
       )}
+      <Confetti ref={confettiRef} />
       {data.map((item, index) => (
         <Text style={styles.text} key={index}>
           {item.name}: {item.phone}
