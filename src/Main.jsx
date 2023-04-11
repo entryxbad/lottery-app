@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {
   Alert,
+  ImageBackground,
   KeyboardAvoidingView,
   StyleSheet,
   Text,
@@ -11,6 +12,8 @@ import {
 import MaskInput from 'react-native-mask-input';
 import {DATA_STORAGE_KEY, getData, setData} from './functions';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
+
+const backgroundImage = require('./assets/screens/main.jpg');
 
 const Main = ({navigation}) => {
   const {styles} = useStyle();
@@ -52,57 +55,59 @@ const Main = ({navigation}) => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.wrapper} behavior="padding">
-      <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-        <Icon style={styles.settings} name="settings" size={50}></Icon>
-      </TouchableOpacity>
-      <Text style={styles.title}>Заполните поля</Text>
-      <TextInput
-        style={styles.input}
-        value={name}
-        onChangeText={(newName) => setName(newName)}
-        placeholder="Ваше имя"></TextInput>
-      <MaskInput
-        style={styles.input}
-        keyboardType="numeric"
-        placeholder="Номер телефона"
-        value={phone}
-        onChangeText={handleChange}
-        mask={[
-          '+',
-          '7',
-          ' ',
-          '(',
-          /\d/,
-          /\d/,
-          /\d/,
-          ')',
-          ' ',
-          /\d/,
-          /\d/,
-          /\d/,
-          '-',
-          /\d/,
-          /\d/,
-          '-',
-          /\d/,
-          /\d/,
-        ]}
-      />
-      <TextInput
-        style={styles.input}
-        value={organization}
-        onChangeText={(newOrganization) => setOrganization(newOrganization)}
-        placeholder="Название организации"></TextInput>
-      <TextInput
-        style={styles.input}
-        value={post}
-        onChangeText={(newPost) => setPost(newPost)}
-        placeholder="Ваша должность"></TextInput>
-      <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-        <Text style={styles.btnText}>Записать</Text>
-      </TouchableOpacity>
-    </KeyboardAvoidingView>
+    <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
+      <KeyboardAvoidingView style={styles.wrapper} behavior="padding">
+        <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+          <Icon style={styles.settings} name="settings" size={50}></Icon>
+        </TouchableOpacity>
+        <Text style={styles.title}>Заполните поля</Text>
+        <TextInput
+          style={styles.input}
+          value={name}
+          onChangeText={(newName) => setName(newName)}
+          placeholder="Ваше имя"></TextInput>
+        <MaskInput
+          style={styles.input}
+          keyboardType="numeric"
+          placeholder="Номер телефона"
+          value={phone}
+          onChangeText={handleChange}
+          mask={[
+            '+',
+            '7',
+            ' ',
+            '(',
+            /\d/,
+            /\d/,
+            /\d/,
+            ')',
+            ' ',
+            /\d/,
+            /\d/,
+            /\d/,
+            '-',
+            /\d/,
+            /\d/,
+            '-',
+            /\d/,
+            /\d/,
+          ]}
+        />
+        <TextInput
+          style={styles.input}
+          value={organization}
+          onChangeText={(newOrganization) => setOrganization(newOrganization)}
+          placeholder="Название организации"></TextInput>
+        <TextInput
+          style={styles.input}
+          value={post}
+          onChangeText={(newPost) => setPost(newPost)}
+          placeholder="Ваша должность"></TextInput>
+        <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
+          <Text style={styles.btnText}>Записать</Text>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
+    </ImageBackground>
   );
 };
 
@@ -114,7 +119,6 @@ const useStyle = () => {
   const styles = StyleSheet.create({
     wrapper: {
       display: 'flex',
-      backgroundColor: '#4287f5',
       justifyContent: 'center',
       alignItems: 'center',
       width: width,
@@ -133,7 +137,7 @@ const useStyle = () => {
     },
     btn: {
       width: '30%',
-      backgroundColor: '#3870c9',
+      backgroundColor: '#005082',
       borderRadius: 10,
       alignItems: 'center',
       padding: 10,
@@ -148,6 +152,10 @@ const useStyle = () => {
       color: '#fff',
       left: width * 0.42,
       bottom: width * 0.01,
+    },
+    backgroundImage: {
+      flex: 1,
+      resizeMode: 'cover',
     },
   });
   return {styles};

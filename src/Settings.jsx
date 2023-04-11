@@ -1,27 +1,32 @@
+import React from 'react';
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   useWindowDimensions,
+  ImageBackground,
 } from 'react-native';
-import React from 'react';
 import {saveData} from './functions';
+
+const backgroundImage = require('./assets/screens/settings.jpg');
 
 const Settings = ({navigation}) => {
   const {styles} = useStyle();
 
   return (
-    <View style={styles.wrapper}>
-      <TouchableOpacity style={styles.btn} onPress={saveData}>
-        <Text style={styles.btnText}>Сохранить</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.btn}
-        onPress={() => navigation.navigate('Winner')}>
-        <Text style={styles.btnText}>Розыгрыш</Text>
-      </TouchableOpacity>
-    </View>
+    <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
+      <View style={styles.wrapper}>
+        <TouchableOpacity style={styles.btn} onPress={saveData}>
+          <Text style={styles.btnText}>Сохранить</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() => navigation.navigate('Winner')}>
+          <Text style={styles.btnText}>Розыгрыш</Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
   );
 };
 
@@ -33,7 +38,6 @@ const useStyle = () => {
   const styles = StyleSheet.create({
     wrapper: {
       display: 'flex',
-      backgroundColor: '#4287f5',
       justifyContent: 'center',
       alignItems: 'center',
       width: width,
@@ -41,7 +45,7 @@ const useStyle = () => {
     },
     btn: {
       width: '30%',
-      backgroundColor: '#3870c9',
+      backgroundColor: '#103977',
       borderRadius: 10,
       alignItems: 'center',
       padding: 10,
@@ -50,6 +54,10 @@ const useStyle = () => {
     btnText: {
       fontSize: width * 0.03,
       color: '#fff',
+    },
+    backgroundImage: {
+      flex: 1,
+      resizeMode: 'cover',
     },
   });
   return {styles};

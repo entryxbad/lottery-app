@@ -8,9 +8,12 @@ import {
   Modal,
   TextInput,
   KeyboardAvoidingView,
+  ImageBackground,
 } from 'react-native';
 import {DATA_STORAGE_KEY, getData} from './functions';
 import Confetti from 'react-native-confetti';
+
+const backgroundImage = require('./assets/screens/winner.jpg');
 
 const Winner = () => {
   const {styles} = useStyle();
@@ -25,7 +28,6 @@ const Winner = () => {
     async function fetchData() {
       const lengthData = await getData(DATA_STORAGE_KEY);
       setRegAmount(lengthData.length);
-      console.log('Length of array:', lengthData.length);
     }
     fetchData();
   }, []);
@@ -65,38 +67,51 @@ const Winner = () => {
   };
 
   return (
-    <View style={styles.wrapper}>
-      <View>
-        {isModalVisible && (
-          <Modal onRequestClose={() => setIsModalVisible(false)}>
-            <KeyboardAvoidingView style={styles.wrapper} behavior="padding">
-              <Text style={styles.title}>Введите количество победителей</Text>
-              <Text style={styles.text}>Всего участников: {regAmount}</Text>
-              <TextInput
-                style={styles.input}
-                value={amount}
-                keyboardType="numeric"
-                onChangeText={handleNameInput}
-              />
-              <TouchableOpacity style={styles.btn} onPress={handleSave}>
-                <Text style={styles.btnText}>Сохранить</Text>
-              </TouchableOpacity>
-            </KeyboardAvoidingView>
-          </Modal>
+    <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
+      <View style={styles.wrapper}>
+        <View>
+          {isModalVisible && (
+            <Modal onRequestClose={() => setIsModalVisible(false)}>
+              <ImageBackground
+                source={backgroundImage}
+                style={styles.backgroundImage}>
+                <KeyboardAvoidingView style={styles.wrapper} behavior="padding">
+                  <Text style={styles.title}>
+                    Введите количество победителей
+                  </Text>
+                  <Text style={styles.text}>Всего участников: {regAmount}</Text>
+                  <TextInput
+                    style={styles.input}
+                    value={amount}
+                    keyboardType="numeric"
+                    onChangeText={handleNameInput}
+                  />
+                  <TouchableOpacity style={styles.btn} onPress={handleSave}>
+                    <Text style={styles.btnText}>Сохранить</Text>
+                  </TouchableOpacity>
+                </KeyboardAvoidingView>
+              </ImageBackground>
+            </Modal>
+          )}
+        </View>
+        {isButtonVisible && (
+          <TouchableOpacity style={styles.btn} onPress={getRandom}>
+            <Text style={styles.btnText}>Разыграть</Text>
+          </TouchableOpacity>
+        )}
+        <Confetti ref={confettiRef} />
+        {data.length > 0 && (
+          <View style={styles.wrapper}>
+            <Text style={styles.title}>Поздравляем победителей!</Text>
+            {data.map((item, index) => (
+              <Text style={styles.text} key={index}>
+                {item.name}: {item.phone}
+              </Text>
+            ))}
+          </View>
         )}
       </View>
-      {isButtonVisible && (
-        <TouchableOpacity style={styles.btn} onPress={getRandom}>
-          <Text style={styles.btnText}>Разыграть</Text>
-        </TouchableOpacity>
-      )}
-      <Confetti ref={confettiRef} />
-      {data.map((item, index) => (
-        <Text style={styles.text} key={index}>
-          {item.name}: {item.phone}
-        </Text>
-      ))}
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -108,7 +123,7 @@ const useStyle = () => {
   const styles = StyleSheet.create({
     wrapper: {
       display: 'flex',
-      backgroundColor: '#4287f5',
+
       justifyContent: 'center',
       alignItems: 'center',
       width: width,
@@ -121,7 +136,7 @@ const useStyle = () => {
     },
     btn: {
       width: '30%',
-      backgroundColor: '#3870c9',
+      backgroundColor: '#154f6a',
       borderRadius: 10,
       alignItems: 'center',
       padding: 10,
@@ -141,6 +156,10 @@ const useStyle = () => {
       margin: 10,
       borderRadius: 10,
       width: '50%',
+    },
+    backgroundImage: {
+      flex: 1,
+      resizeMode: 'cover',
     },
   });
   return {styles};
