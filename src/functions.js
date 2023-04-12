@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alert} from 'react-native';
 
 const RNFS = require('react-native-fs');
-const path = RNFS.ExternalDirectoryPath + '/test.txt';
+const path = RNFS.ExternalDirectoryPath + '/data.txt';
 
 export const DATA_STORAGE_KEY = 'save-data';
 

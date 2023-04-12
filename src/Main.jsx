@@ -10,7 +10,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import MaskInput from 'react-native-mask-input';
-import {DATA_STORAGE_KEY, getData, setData} from './functions';
+import {DATA_STORAGE_KEY, getData, saveData, setData} from './functions';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
 const backgroundImage = require('./assets/screens/main.jpg');
