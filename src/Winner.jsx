@@ -105,7 +105,7 @@ const Winner = () => {
             <Text style={styles.title}>Поздравляем победителей!</Text>
             {data.map((item, index) => (
               <Text style={styles.text} key={index}>
-                {item.name}: {item.phone}
+                {index + 1}) {item.name}: {item.phone}
               </Text>
             ))}
           </View>
