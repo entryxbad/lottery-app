@@ -10,8 +10,13 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import MaskInput from 'react-native-mask-input';
-import {DATA_STORAGE_KEY, getData, saveData, setData} from './functions';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import {
+  checkPhoneNumber,
+  checkPersonExists,
+  loadDataFromFile,
+  saveDataToFile,
+} from './functions';
 
 const backgroundImage = require('./assets/screens/main.jpg');
 
@@ -29,7 +34,7 @@ const Main = ({navigation}) => {
   };
 
   const handleSubmit = async () => {
-    if (phone.length < 10) {
+    if (!checkPhoneNumber(phone)) {
       Alert.alert('Некорректный номер телефона.');
       return;
     }
@@ -46,11 +51,27 @@ const Main = ({navigation}) => {
       return;
     }
 
-    setPersons((prevPersons) => [...prevPersons, newPerson]);
-    await setData(DATA_STORAGE_KEY, [...persons, newPerson]);
+    // Проверка наличия пользователя с таким номером телефона
+    if (persons.some((person) => person.phone === phone)) {
+      Alert.alert('Пользователь с таким номером телефона уже существует.');
+      return;
+    }
 
-    const qwerty = await getData(DATA_STORAGE_KEY);
-    console.log('AsyncStorage :', qwerty);
+    // Добавление нового пользователя в список пользователей
+    setPersons((prevPersons) => [...prevPersons, newPerson]);
+
+    // Загрузка данных из файла
+    const data = await loadDataFromFile();
+
+    // Проверка наличия пользователя с таким номером телефона в файле
+    if (await checkPersonExists(data, phone)) {
+      return;
+    }
+
+    // Добавление нового пользователя в файл
+    data.push(newPerson);
+
+    await saveDataToFile(data);
 
     Alert.alert('Спасибо за участие.');
     setName('');
