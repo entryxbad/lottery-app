@@ -12,7 +12,9 @@ import {
 } from 'react-native';
 import {DATA_STORAGE_KEY, getData} from './functions';
 import Confetti from 'react-native-confetti';
+import RNFS from 'react-native-fs';
 
+const path = RNFS.ExternalDirectoryPath + '/data.txt';
 const backgroundImage = require('./assets/screens/winner.jpg');
 
 const Winner = () => {
@@ -26,7 +28,7 @@ const Winner = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const lengthData = await getData(DATA_STORAGE_KEY);
+      const lengthData = JSON.parse(await RNFS.readFile(path));
       setRegAmount(lengthData.length);
     }
     fetchData();

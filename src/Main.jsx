@@ -29,6 +29,11 @@ const Main = ({navigation}) => {
   };
 
   const handleSubmit = async () => {
+    if (phone.length < 10) {
+      Alert.alert('Некорректный номер телефона.');
+      return;
+    }
+
     const newPerson = {
       name: name,
       phone: phone,
