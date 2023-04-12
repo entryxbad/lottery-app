@@ -19,7 +19,7 @@ const Main = ({navigation}) => {
   const {styles} = useStyle();
   const [persons, setPersons] = useState([]);
   const [name, setName] = useState();
-  const [phone, setPhone] = useState();
+  const [phone, setPhone] = useState('+7');
   const [organization, setOrganization] = useState();
   const [post, setPost] = useState();
 
@@ -49,7 +49,7 @@ const Main = ({navigation}) => {
 
     Alert.alert('Спасибо за участие.');
     setName('');
-    setPhone('');
+    setPhone('+7');
     setOrganization('');
     setPost('');
   };
