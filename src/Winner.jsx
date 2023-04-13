@@ -40,7 +40,7 @@ const Winner = ({route}) => {
       confettiRef.current.startConfetti();
       setTimeout(() => {
         confettiRef.current.stopConfetti();
-      }, 10000); // остановка конфетти через 3 секунды
+      }, 10000);
     }
 
     setData(result);
