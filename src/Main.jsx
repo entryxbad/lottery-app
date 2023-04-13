@@ -35,7 +35,7 @@ const Main = ({navigation}) => {
 
   const handleSubmit = async () => {
     if (!checkPhoneNumber(phone)) {
-      Alert.alert('Некорректный номер телефона.');
+      Alert.alert('Ошибка', 'Некорректный номер телефона.');
       return;
     }
 
@@ -47,13 +47,16 @@ const Main = ({navigation}) => {
     };
 
     if (!name || !phone || !organization || !post) {
-      Alert.alert('Пожалуйста. Заполните все поля.');
+      Alert.alert('Ошибка', 'Пожалуйста. Заполните все поля.');
       return;
     }
 
     // Проверка наличия пользователя с таким номером телефона
     if (persons.some((person) => person.phone === phone)) {
-      Alert.alert('Пользователь с таким номером телефона уже существует.');
+      Alert.alert(
+        'Ошибка',
+        'Пользователь с таким номером телефона уже существует.',
+      );
       return;
     }
 
@@ -176,7 +179,7 @@ const useStyle = () => {
     settings: {
       position: 'absolute',
       color: '#fff',
-      left: width * 0.42,
+      left: width * 0.44,
       bottom: width * 0.01,
     },
     backgroundImage: {

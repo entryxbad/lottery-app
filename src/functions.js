@@ -2,7 +2,7 @@ import RNFS from 'react-native-fs';
 import {exists, readFile, writeFile} from 'react-native-fs';
 import {Alert} from 'react-native';
 
-const filePath = RNFS.ExternalDirectoryPath + '/data.txt';
+export const filePath = RNFS.ExternalDirectoryPath + '/data.txt';
 
 export const checkPhoneNumber = (phoneNumber) => {
   return phoneNumber.length >= 10;
