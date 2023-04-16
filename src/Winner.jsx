@@ -83,15 +83,17 @@ const useStyle = () => {
       alignItems: 'center',
       width: width,
       height: height,
+      backgroundColor: 'rgba(0,0,0,0.25)',
     },
     title: {
+      textAlign: 'center',
       fontSize: width * 0.04,
       marginBottom: 50,
       color: '#fff',
     },
     btn: {
       width: width * 0.3,
-      backgroundColor: '#154f6a',
+      backgroundColor: '#4a2f26',
       borderRadius: 10,
       alignItems: 'center',
       padding: 10,
@@ -102,6 +104,7 @@ const useStyle = () => {
       color: '#fff',
     },
     text: {
+      textAlign: 'left',
       fontSize: width * 0.028,
       color: '#fff',
       marginTop: 50,

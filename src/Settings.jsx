@@ -86,6 +86,7 @@ const useStyle = () => {
       alignItems: 'center',
       width: width,
       height: height,
+      backgroundColor: 'rgba(0,0,0,0.3)',
     },
     title: {
       fontSize: width * 0.04,
@@ -94,7 +95,7 @@ const useStyle = () => {
     },
     btn: {
       width: width * 0.3,
-      backgroundColor: '#154f6a',
+      backgroundColor: '#a1a188',
       borderRadius: 10,
       alignItems: 'center',
       padding: 10,
@@ -114,6 +115,7 @@ const useStyle = () => {
       margin: 10,
       borderRadius: 10,
       width: width * 0.5,
+      backgroundColor: '#d9d9db',
     },
     backgroundImage: {
       flex: 1,
