@@ -37,6 +37,10 @@ const Main = ({ navigation }) => {
   useEffect(() => {
     playSound()
     setIsPlaying(true)
+
+    return () => {
+      stopSound(setIsPlaying)
+    }
   }, [])
 
   const handlePressOnDisplay = () => {
