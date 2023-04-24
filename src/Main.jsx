@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Alert,
   ImageBackground,
@@ -6,13 +6,16 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
+  TouchableHighlight,
+  Keyboard,
+  TouchableWithoutFeedback,
   useWindowDimensions
 } from 'react-native'
 import MaskInput from 'react-native-mask-input'
 import Icon from 'react-native-vector-icons/SimpleLineIcons'
 import { checkPhoneNumber, checkPersonExists } from './utils/functions'
 import { saveDataToFile, loadDataFromFile } from './utils/dataOperations'
+import { handleInputFocus, playSound, stopSound } from './utils/player'
 
 const backgroundImage = require('./assets/screens/main.jpg')
 
@@ -23,6 +26,20 @@ const Main = ({ navigation }) => {
   const [phone, setPhone] = useState('+7')
   const [organization, setOrganization] = useState()
   const [post, setPost] = useState()
+  const [isPlaying, setIsPlaying] = useState(false)
+
+  useEffect(() => {
+    playSound()
+    setIsPlaying(true)
+  }, [])
+
+  const handlePress = () => {
+    Keyboard.dismiss()
+    console.log('stop music')
+    if (isPlaying) {
+      stopSound(setIsPlaying)
+    }
+  }
 
   const handleChange = (masked, newPhone) => {
     setPhone(masked)
@@ -33,6 +50,11 @@ const Main = ({ navigation }) => {
     if (!checkPhoneNumber(phone)) {
       Alert.alert('Ошибка', 'Некорректный номер телефона.')
       return
+    }
+
+    if (!isPlaying) {
+      playSound()
+      setIsPlaying(true)
     }
 
     const newPerson = {
@@ -81,60 +103,66 @@ const Main = ({ navigation }) => {
 
   return (
     <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
-      <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
-        <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-          <Icon style={styles.settings} name='settings' size={50}></Icon>
-        </TouchableOpacity>
-        <Text style={styles.title}>Заполните поля</Text>
-        <TextInput
-          style={styles.input}
-          value={name}
-          onChangeText={(newName) => setName(newName)}
-          placeholder='Ваше имя'
-        ></TextInput>
-        <MaskInput
-          style={styles.input}
-          keyboardType='numeric'
-          placeholder='Номер телефона'
-          value={phone}
-          onChangeText={handleChange}
-          mask={[
-            '+',
-            '7',
-            ' ',
-            '(',
-            /\d/,
-            /\d/,
-            /\d/,
-            ')',
-            ' ',
-            /\d/,
-            /\d/,
-            /\d/,
-            '-',
-            /\d/,
-            /\d/,
-            '-',
-            /\d/,
-            /\d/
-          ]}
-        />
-        <TextInput
-          style={styles.input}
-          value={organization}
-          onChangeText={(newOrganization) => setOrganization(newOrganization)}
-          placeholder='Название организации'
-        ></TextInput>
-        <TextInput
-          style={styles.input}
-          value={post}
-          onChangeText={(newPost) => setPost(newPost)}
-          placeholder='Ваша должность'
-        ></TextInput>
-        <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-          <Text style={styles.btnText}>Записать</Text>
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
+      <TouchableWithoutFeedback onPress={handlePress}>
+        <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
+          <TouchableHighlight onPress={() => navigation.navigate('Settings')}>
+            <Icon style={styles.settings} name='settings' size={50}></Icon>
+          </TouchableHighlight>
+          <Text style={styles.title}>Заполните поля</Text>
+          <TextInput
+            style={styles.input}
+            value={name}
+            onChangeText={(newName) => setName(newName)}
+            placeholder='Ваше имя'
+            onFocus={handleInputFocus}
+          ></TextInput>
+          <MaskInput
+            style={styles.input}
+            keyboardType='numeric'
+            placeholder='Номер телефона'
+            value={phone}
+            onChangeText={handleChange}
+            onFocus={handleInputFocus}
+            mask={[
+              '+',
+              '7',
+              ' ',
+              '(',
+              /\d/,
+              /\d/,
+              /\d/,
+              ')',
+              ' ',
+              /\d/,
+              /\d/,
+              /\d/,
+              '-',
+              /\d/,
+              /\d/,
+              '-',
+              /\d/,
+              /\d/
+            ]}
+          />
+          <TextInput
+            style={styles.input}
+            value={organization}
+            onChangeText={(newOrganization) => setOrganization(newOrganization)}
+            placeholder='Название организации'
+            onFocus={handleInputFocus}
+          ></TextInput>
+          <TextInput
+            style={styles.input}
+            value={post}
+            onChangeText={(newPost) => setPost(newPost)}
+            placeholder='Ваша должность'
+            onFocus={handleInputFocus}
+          ></TextInput>
+          <TouchableHighlight style={styles.btn} onPress={handleSubmit}>
+            <Text style={styles.btnText}>Записать</Text>
+          </TouchableHighlight>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     </ImageBackground>
   )
 }
