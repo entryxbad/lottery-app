@@ -15,7 +15,12 @@ import MaskInput from 'react-native-mask-input'
 import Icon from 'react-native-vector-icons/SimpleLineIcons'
 import { checkPhoneNumber, checkPersonExists } from './utils/functions'
 import { saveDataToFile, loadDataFromFile } from './utils/dataOperations'
-import { handleInputFocus, playSound, stopSound } from './utils/player'
+import {
+  handleInputFocus,
+  playSound,
+  playThanksSound,
+  stopSound
+} from './utils/player'
 
 const backgroundImage = require('./assets/screens/main.jpg')
 
@@ -27,15 +32,16 @@ const Main = ({ navigation }) => {
   const [organization, setOrganization] = useState()
   const [post, setPost] = useState()
   const [isPlaying, setIsPlaying] = useState(false)
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
 
   useEffect(() => {
     playSound()
     setIsPlaying(true)
   }, [])
 
-  const handlePress = () => {
+  const handlePressOnDisplay = () => {
     Keyboard.dismiss()
-    console.log('stop music')
+    console.log('first')
     if (isPlaying) {
       stopSound(setIsPlaying)
     }
@@ -52,10 +58,15 @@ const Main = ({ navigation }) => {
       return
     }
 
-    if (!isPlaying) {
-      playSound()
-      setIsPlaying(true)
-    }
+    setIsFormSubmitted(true)
+    stopSound(setIsPlaying, () => {
+      playThanksSound()
+      setTimeout(() => {
+        setIsFormSubmitted(false)
+        playSound()
+        setIsPlaying(true)
+      }, 5000)
+    })
 
     const newPerson = {
       name: name,
@@ -103,7 +114,7 @@ const Main = ({ navigation }) => {
 
   return (
     <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
-      <TouchableWithoutFeedback onPress={handlePress}>
+      <TouchableWithoutFeedback onPress={handlePressOnDisplay}>
         <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
           <TouchableHighlight onPress={() => navigation.navigate('Settings')}>
             <Icon style={styles.settings} name='settings' size={50}></Icon>
