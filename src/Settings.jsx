@@ -114,8 +114,11 @@ const useStyle = () => {
       backgroundColor: '#fff',
       margin: 10,
       borderRadius: 10,
-      width: width * 0.5,
+      width: width * 0.05,
+      height: height * 0.1,
       backgroundColor: '#d9d9db',
+      textAlign: 'center',
+      fontSize: height * 0.05,
     },
     backgroundImage: {
       flex: 1,

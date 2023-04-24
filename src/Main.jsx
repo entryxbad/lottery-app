@@ -163,6 +163,8 @@ const useStyle = () => {
       margin: 10,
       borderRadius: 10,
       width: width * 0.5,
+      height: height * 0.08,
+      fontSize: width * 0.015,
     },
     btn: {
       width: width * 0.3,
@@ -179,8 +181,9 @@ const useStyle = () => {
     settings: {
       position: 'absolute',
       color: '#fff',
-      left: width * 0.44,
-      bottom: width * 0.01,
+      left: width * 0.42,
+      bottom: height * -0.02,
+      fontSize: width * 0.05,
     },
     backgroundImage: {
       flex: 1,
