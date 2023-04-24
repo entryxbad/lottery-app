@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react'
 import {
   StyleSheet,
   Text,
@@ -8,61 +8,61 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
   TextInput,
-  Alert,
-} from 'react-native';
-import RNFS from 'react-native-fs';
-import {filePath} from './functions';
+  Alert
+} from 'react-native'
+import RNFS from 'react-native-fs'
+import { filePath } from './utils/dataOperations'
 
-const backgroundImage = require('./assets/screens/settings.jpg');
+const backgroundImage = require('./assets/screens/settings.jpg')
 
-const Settings = ({navigation}) => {
-  const {styles} = useStyle();
-  const [regAmount, setRegAmount] = useState('');
-  const [amount, setAmount] = useState('');
+const Settings = ({ navigation }) => {
+  const { styles } = useStyle()
+  const [regAmount, setRegAmount] = useState('')
+  const [amount, setAmount] = useState('')
 
   useEffect(() => {
     async function fetchData() {
-      const lengthData = JSON.parse(await RNFS.readFile(filePath));
-      setRegAmount(lengthData.length);
+      const lengthData = JSON.parse(await RNFS.readFile(filePath))
+      setRegAmount(lengthData.length)
     }
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   const handleSave = () => {
     if (amount === '') {
-      Alert.alert('Ошибка', 'Необходимо указать количество участников');
+      Alert.alert('Ошибка', 'Необходимо указать количество участников')
     } else if (parseInt(amount) === 0) {
-      Alert.alert('Ошибка', 'Количество участников должно быть 0.');
+      Alert.alert('Ошибка', 'Количество участников должно быть 0.')
     } else if (parseInt(amount) < 0) {
       Alert.alert(
         'Ошибка',
-        'Количество участников не может быть отрицательным.',
-      );
+        'Количество участников не может быть отрицательным.'
+      )
     } else if (regAmount >= parseInt(amount)) {
-      navigation.navigate('Winner', {amount: amount});
+      navigation.navigate('Winner', { amount: amount })
     } else {
       Alert.alert(
         'Ошибка',
-        'Количество победителей не может больше количества участников.',
-      );
+        'Количество победителей не может больше количества участников.'
+      )
     }
-  };
+  }
 
   // Обработчик изменения количества победителей
   const handleNameInput = (text) => {
-    setAmount(text);
-  };
+    setAmount(text)
+  }
 
   return (
     <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
       <View style={styles.wrapper}>
-        <KeyboardAvoidingView style={styles.wrapper} behavior="padding">
+        <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
           <Text style={styles.title}>Введите количество победителей</Text>
           <Text style={styles.text}>Всего участников: {regAmount}</Text>
           <TextInput
             style={styles.input}
             value={amount}
-            keyboardType="numeric"
+            keyboardType='numeric'
             onChangeText={handleNameInput}
           />
           <TouchableOpacity style={styles.btn} onPress={handleSave}>
@@ -71,13 +71,13 @@ const Settings = ({navigation}) => {
         </KeyboardAvoidingView>
       </View>
     </ImageBackground>
-  );
-};
+  )
+}
 
-export default Settings;
+export default Settings
 
 const useStyle = () => {
-  const {height, width} = useWindowDimensions();
+  const { height, width } = useWindowDimensions()
 
   const styles = StyleSheet.create({
     wrapper: {
@@ -86,12 +86,12 @@ const useStyle = () => {
       alignItems: 'center',
       width: width,
       height: height,
-      backgroundColor: 'rgba(0,0,0,0.3)',
+      backgroundColor: 'rgba(0,0,0,0.3)'
     },
     title: {
       fontSize: width * 0.04,
       marginBottom: 50,
-      color: '#fff',
+      color: '#fff'
     },
     btn: {
       width: width * 0.3,
@@ -99,16 +99,16 @@ const useStyle = () => {
       borderRadius: 10,
       alignItems: 'center',
       padding: 10,
-      marginTop: 50,
+      marginTop: 50
     },
     btnText: {
       fontSize: width * 0.03,
-      color: '#fff',
+      color: '#fff'
     },
     text: {
       fontSize: width * 0.028,
       color: '#fff',
-      marginTop: 50,
+      marginTop: 50
     },
     input: {
       backgroundColor: '#fff',
@@ -118,12 +118,12 @@ const useStyle = () => {
       height: height * 0.1,
       backgroundColor: '#d9d9db',
       textAlign: 'center',
-      fontSize: height * 0.05,
+      fontSize: height * 0.05
     },
     backgroundImage: {
       flex: 1,
-      resizeMode: 'cover',
-    },
-  });
-  return {styles};
-};
+      resizeMode: 'cover'
+    }
+  })
+  return { styles }
+}

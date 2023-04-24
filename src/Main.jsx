@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react'
 import {
   Alert,
   ImageBackground,
@@ -7,98 +7,95 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  useWindowDimensions,
-} from 'react-native';
-import MaskInput from 'react-native-mask-input';
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import {
-  checkPhoneNumber,
-  checkPersonExists,
-  loadDataFromFile,
-  saveDataToFile,
-} from './functions';
+  useWindowDimensions
+} from 'react-native'
+import MaskInput from 'react-native-mask-input'
+import Icon from 'react-native-vector-icons/SimpleLineIcons'
+import { checkPhoneNumber, checkPersonExists } from './utils/functions'
+import { saveDataToFile, loadDataFromFile } from './utils/dataOperations'
 
-const backgroundImage = require('./assets/screens/main.jpg');
+const backgroundImage = require('./assets/screens/main.jpg')
 
-const Main = ({navigation}) => {
-  const {styles} = useStyle();
-  const [persons, setPersons] = useState([]);
-  const [name, setName] = useState();
-  const [phone, setPhone] = useState('+7');
-  const [organization, setOrganization] = useState();
-  const [post, setPost] = useState();
+const Main = ({ navigation }) => {
+  const { styles } = useStyle()
+  const [persons, setPersons] = useState([])
+  const [name, setName] = useState()
+  const [phone, setPhone] = useState('+7')
+  const [organization, setOrganization] = useState()
+  const [post, setPost] = useState()
 
   const handleChange = (masked, newPhone) => {
-    setPhone(masked);
-    setPhone(newPhone);
-  };
+    setPhone(masked)
+    setPhone(newPhone)
+  }
 
   const handleSubmit = async () => {
     if (!checkPhoneNumber(phone)) {
-      Alert.alert('Ошибка', 'Некорректный номер телефона.');
-      return;
+      Alert.alert('Ошибка', 'Некорректный номер телефона.')
+      return
     }
 
     const newPerson = {
       name: name,
       phone: phone,
       organization: organization,
-      post: post,
-    };
+      post: post
+    }
 
     if (!name || !phone || !organization || !post) {
-      Alert.alert('Ошибка', 'Пожалуйста. Заполните все поля.');
-      return;
+      Alert.alert('Ошибка', 'Пожалуйста. Заполните все поля.')
+      return
     }
 
     // Проверка наличия пользователя с таким номером телефона
     if (persons.some((person) => person.phone === phone)) {
       Alert.alert(
         'Ошибка',
-        'Пользователь с таким номером телефона уже существует.',
-      );
-      return;
+        'Пользователь с таким номером телефона уже существует.'
+      )
+      return
     }
 
     // Добавление нового пользователя в список пользователей
-    setPersons((prevPersons) => [...prevPersons, newPerson]);
+    setPersons((prevPersons) => [...prevPersons, newPerson])
 
     // Загрузка данных из файла
-    const data = await loadDataFromFile();
+    const data = await loadDataFromFile()
 
     // Проверка наличия пользователя с таким номером телефона в файле
     if (await checkPersonExists(data, phone)) {
-      return;
+      return
     }
 
     // Добавление нового пользователя в файл
-    data.push(newPerson);
+    data.push(newPerson)
 
-    await saveDataToFile(data);
+    await saveDataToFile(data)
 
-    Alert.alert('Спасибо за участие.');
-    setName('');
-    setPhone('+7');
-    setOrganization('');
-    setPost('');
-  };
+    Alert.alert('Спасибо за участие.')
+    setName('')
+    setPhone('+7')
+    setOrganization('')
+    setPost('')
+  }
 
   return (
     <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
-      <KeyboardAvoidingView style={styles.wrapper} behavior="padding">
+      <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
         <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-          <Icon style={styles.settings} name="settings" size={50}></Icon>
+          <Icon style={styles.settings} name='settings' size={50}></Icon>
         </TouchableOpacity>
         <Text style={styles.title}>Заполните поля</Text>
         <TextInput
           style={styles.input}
           value={name}
           onChangeText={(newName) => setName(newName)}
-          placeholder="Ваше имя"></TextInput>
+          placeholder='Ваше имя'
+        ></TextInput>
         <MaskInput
           style={styles.input}
-          keyboardType="numeric"
-          placeholder="Номер телефона"
+          keyboardType='numeric'
+          placeholder='Номер телефона'
           value={phone}
           onChangeText={handleChange}
           mask={[
@@ -119,31 +116,33 @@ const Main = ({navigation}) => {
             /\d/,
             '-',
             /\d/,
-            /\d/,
+            /\d/
           ]}
         />
         <TextInput
           style={styles.input}
           value={organization}
           onChangeText={(newOrganization) => setOrganization(newOrganization)}
-          placeholder="Название организации"></TextInput>
+          placeholder='Название организации'
+        ></TextInput>
         <TextInput
           style={styles.input}
           value={post}
           onChangeText={(newPost) => setPost(newPost)}
-          placeholder="Ваша должность"></TextInput>
+          placeholder='Ваша должность'
+        ></TextInput>
         <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
           <Text style={styles.btnText}>Записать</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </ImageBackground>
-  );
-};
+  )
+}
 
-export default Main;
+export default Main
 
 const useStyle = () => {
-  const {height, width} = useWindowDimensions();
+  const { height, width } = useWindowDimensions()
 
   const styles = StyleSheet.create({
     wrapper: {
@@ -151,12 +150,12 @@ const useStyle = () => {
       justifyContent: 'center',
       alignItems: 'center',
       width: width,
-      height: height,
+      height: height
     },
     title: {
       fontSize: width * 0.05,
       marginBottom: 50,
-      color: '#fff',
+      color: '#fff'
     },
     input: {
       backgroundColor: '#fff',
@@ -164,7 +163,7 @@ const useStyle = () => {
       borderRadius: 10,
       width: width * 0.5,
       height: height * 0.08,
-      fontSize: width * 0.015,
+      fontSize: width * 0.015
     },
     btn: {
       width: width * 0.3,
@@ -172,23 +171,23 @@ const useStyle = () => {
       borderRadius: 10,
       alignItems: 'center',
       padding: 10,
-      marginTop: 50,
+      marginTop: 50
     },
     btnText: {
       fontSize: width * 0.03,
-      color: '#fff',
+      color: '#fff'
     },
     settings: {
       position: 'absolute',
       color: '#fff',
       left: width * 0.42,
       bottom: height * -0.02,
-      fontSize: width * 0.05,
+      fontSize: width * 0.05
     },
     backgroundImage: {
       flex: 1,
-      resizeMode: 'cover',
-    },
-  });
-  return {styles};
-};
+      resizeMode: 'cover'
+    }
+  })
+  return { styles }
+}

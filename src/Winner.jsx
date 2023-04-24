@@ -1,51 +1,48 @@
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from 'react'
 import {
   StyleSheet,
   Text,
   View,
   useWindowDimensions,
   TouchableOpacity,
-  Modal,
-  TextInput,
-  KeyboardAvoidingView,
-  ImageBackground,
-} from 'react-native';
-import Confetti from 'react-native-confetti';
-import {filePath} from './functions';
-import RNFS from 'react-native-fs';
+  ImageBackground
+} from 'react-native'
+import Confetti from 'react-native-confetti'
+import RNFS from 'react-native-fs'
+import { filePath } from './utils/dataOperations'
 
-const backgroundImage = require('./assets/screens/winner.jpg');
+const backgroundImage = require('./assets/screens/winner.jpg')
 
-const Winner = ({route}) => {
-  const {styles} = useStyle();
-  const [data, setData] = useState([]);
-  const [isButtonVisible, setIsButtonVisible] = useState(true);
-  const confettiRef = useRef(null);
-  const {amount} = route.params;
+const Winner = ({ route }) => {
+  const { styles } = useStyle()
+  const [data, setData] = useState([])
+  const [isButtonVisible, setIsButtonVisible] = useState(true)
+  const confettiRef = useRef(null)
+  const { amount } = route.params
 
   // Функция получения случайных победителей
   const getRandom = async () => {
-    setIsButtonVisible(false);
-    const data = JSON.parse(await RNFS.readFile(filePath));
+    setIsButtonVisible(false)
+    const data = JSON.parse(await RNFS.readFile(filePath))
 
-    let result = [];
+    let result = []
 
     while (result.length != amount) {
-      const random = Math.floor(Math.random() * data.length);
-      result.push(data[random]);
-      result = result.filter((v, i, arr) => arr.indexOf(v) == i);
+      const random = Math.floor(Math.random() * data.length)
+      result.push(data[random])
+      result = result.filter((v, i, arr) => arr.indexOf(v) == i)
     }
 
     if (confettiRef.current) {
-      confettiRef.current.startConfetti();
+      confettiRef.current.startConfetti()
       setTimeout(() => {
-        confettiRef.current.stopConfetti();
-      }, 10000);
+        confettiRef.current.stopConfetti()
+      }, 10000)
     }
 
-    setData(result);
-    return result;
-  };
+    setData(result)
+    return result
+  }
 
   return (
     <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
@@ -68,13 +65,13 @@ const Winner = ({route}) => {
         )}
       </View>
     </ImageBackground>
-  );
-};
+  )
+}
 
-export default Winner;
+export default Winner
 
 const useStyle = () => {
-  const {height, width} = useWindowDimensions();
+  const { height, width } = useWindowDimensions()
 
   const styles = StyleSheet.create({
     wrapper: {
@@ -83,13 +80,13 @@ const useStyle = () => {
       alignItems: 'center',
       width: width,
       height: height,
-      backgroundColor: 'rgba(0,0,0,0.25)',
+      backgroundColor: 'rgba(0,0,0,0.25)'
     },
     title: {
       textAlign: 'center',
       fontSize: width * 0.04,
       marginBottom: 50,
-      color: '#fff',
+      color: '#fff'
     },
     btn: {
       width: width * 0.3,
@@ -97,28 +94,28 @@ const useStyle = () => {
       borderRadius: 10,
       alignItems: 'center',
       padding: 10,
-      marginTop: 10,
+      marginTop: 10
     },
     btnText: {
       fontSize: width * 0.03,
-      color: '#fff',
+      color: '#fff'
     },
     text: {
       textAlign: 'left',
       fontSize: width * 0.028,
       color: '#fff',
-      marginTop: 50,
+      marginTop: 50
     },
     input: {
       backgroundColor: '#fff',
       margin: 10,
       borderRadius: 10,
-      width: width * 0.5,
+      width: width * 0.5
     },
     backgroundImage: {
       flex: 1,
-      resizeMode: 'cover',
-    },
-  });
-  return {styles};
-};
+      resizeMode: 'cover'
+    }
+  })
+  return { styles }
+}
