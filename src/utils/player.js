@@ -40,6 +40,10 @@ export const stopSound = (setIsPlaying, playThanksSound = false) => {
   })
 }
 
+export const stopSoundAnotherScreen = () => {
+  soundFile.stop()
+}
+
 export const playSound = () => {
   soundFile.play()
 }

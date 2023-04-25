@@ -19,7 +19,8 @@ import {
   handleInputFocus,
   playSound,
   playThanksSound,
-  stopSound
+  stopSound,
+  stopSoundAnotherScreen
 } from './utils/player'
 
 const backgroundImage = require('./assets/screens/main.jpg')
@@ -120,7 +121,12 @@ const Main = ({ navigation }) => {
     <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
       <TouchableWithoutFeedback onPress={handlePressOnDisplay}>
         <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
-          <TouchableHighlight onPress={() => navigation.navigate('Settings')}>
+          <TouchableHighlight
+            onPress={() => {
+              stopSoundAnotherScreen()
+              navigation.navigate('Settings')
+            }}
+          >
             <Icon style={styles.settings} name='settings' size={50}></Icon>
           </TouchableHighlight>
           <Text style={styles.title}>Заполните поля</Text>
