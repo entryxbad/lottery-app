@@ -8,7 +8,9 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
   TextInput,
-  Alert
+  Alert,
+  TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native'
 import RNFS from 'react-native-fs'
 import { filePath } from './utils/dataOperations'
@@ -56,19 +58,21 @@ const Settings = ({ navigation }) => {
   return (
     <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
       <View style={styles.wrapper}>
-        <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
-          <Text style={styles.title}>Введите количество победителей</Text>
-          <Text style={styles.text}>Всего участников: {regAmount}</Text>
-          <TextInput
-            style={styles.input}
-            value={amount}
-            keyboardType='numeric'
-            onChangeText={handleNameInput}
-          />
-          <TouchableOpacity style={styles.btn} onPress={handleSave}>
-            <Text style={styles.btnText}>Сохранить</Text>
-          </TouchableOpacity>
-        </KeyboardAvoidingView>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
+            <Text style={styles.title}>Введите количество победителей</Text>
+            <Text style={styles.text}>Всего участников: {regAmount}</Text>
+            <TextInput
+              style={styles.input}
+              value={amount}
+              keyboardType='numeric'
+              onChangeText={handleNameInput}
+            />
+            <TouchableOpacity style={styles.btn} onPress={handleSave}>
+              <Text style={styles.btnText}>Сохранить</Text>
+            </TouchableOpacity>
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
       </View>
     </ImageBackground>
   )

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import {
   StyleSheet,
   Text,
@@ -6,7 +6,8 @@ import {
   useWindowDimensions,
   TouchableOpacity,
   ImageBackground,
-  FlatList
+  FlatList,
+  BackHandler
 } from 'react-native'
 import Confetti from 'react-native-confetti'
 import RNFS from 'react-native-fs'
@@ -18,6 +19,7 @@ const Winner = ({ route }) => {
   const { styles } = useStyle()
   const [data, setData] = useState([])
   const [isButtonVisible, setIsButtonVisible] = useState(true)
+  const [isConfettiPlaying, setIsConfettiPlaying] = useState(false)
   const confettiRef = useRef(null)
   const { amount } = route.params
 
@@ -35,15 +37,30 @@ const Winner = ({ route }) => {
     }
 
     if (confettiRef.current) {
+      setIsConfettiPlaying(true)
       confettiRef.current.startConfetti()
       setTimeout(() => {
         confettiRef.current.stopConfetti()
+        setIsConfettiPlaying(false)
       }, 10000)
     }
 
     setData(result)
     return result
   }
+
+  const onBackButtonPress = () => {
+    if (isConfettiPlaying) {
+      return true // не вернётся назад пока проигрывается анимация
+    }
+    return false // можно выйти по кнопке "назад" после анимации
+  }
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', onBackButtonPress)
+    return () =>
+      BackHandler.removeEventListener('hardwareBackPress', onBackButtonPress)
+  }, [isConfettiPlaying])
 
   const renderItem = ({ item, index }) => (
     <Text style={styles.text} key={item.phone}>
