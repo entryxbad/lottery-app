@@ -36,8 +36,10 @@ const Main = ({ navigation }) => {
   const [isFormSubmitted, setIsFormSubmitted] = useState(false)
 
   useEffect(() => {
-    playSound()
-    setIsPlaying(true)
+    setTimeout(() => {
+      playSound()
+      setIsPlaying(true)
+    }, 500)
 
     return () => {
       stopSound(setIsPlaying)
