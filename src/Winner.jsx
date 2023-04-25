@@ -5,7 +5,8 @@ import {
   View,
   useWindowDimensions,
   TouchableOpacity,
-  ImageBackground
+  ImageBackground,
+  FlatList
 } from 'react-native'
 import Confetti from 'react-native-confetti'
 import RNFS from 'react-native-fs'
@@ -44,6 +45,12 @@ const Winner = ({ route }) => {
     return result
   }
 
+  const renderItem = ({ item, index }) => (
+    <Text style={styles.text} key={item.phone}>
+      {index + 1}) {item.name}: {item.phone}
+    </Text>
+  )
+
   return (
     <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
       <View style={styles.wrapper}>
@@ -56,11 +63,14 @@ const Winner = ({ route }) => {
         {data.length > 0 && (
           <View style={styles.wrapper}>
             <Text style={styles.title}>Поздравляем победителей!</Text>
-            {data.map((item, index) => (
-              <Text style={styles.text} key={index}>
-                {index + 1}) {item.name}: {item.phone}
-              </Text>
-            ))}
+            <FlatList
+              data={data}
+              keyExtractor={(item) => item.phone.toString()}
+              renderItem={renderItem}
+              ListFooterComponent={
+                <View style={{ height: 20, paddingBottom: 30 }} />
+              }
+            />
           </View>
         )}
       </View>
@@ -75,17 +85,17 @@ const useStyle = () => {
 
   const styles = StyleSheet.create({
     wrapper: {
-      display: 'flex',
+      flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
       width: width,
       height: height,
-      backgroundColor: 'rgba(0,0,0,0.25)'
+      backgroundColor: 'rgba(0,0,0,0.3)'
     },
     title: {
       textAlign: 'center',
       fontSize: width * 0.04,
-      marginBottom: 50,
+      paddingTop: 20,
       color: '#fff'
     },
     btn: {
@@ -104,7 +114,7 @@ const useStyle = () => {
       textAlign: 'left',
       fontSize: width * 0.028,
       color: '#fff',
-      marginTop: 50
+      paddingTop: 50
     },
     input: {
       backgroundColor: '#fff',
