@@ -64,7 +64,7 @@ const Winner = ({ route }) => {
 
   const renderItem = ({ item, index }) => (
     <Text style={styles.text} key={item.phone}>
-      {index + 1}) {item.name}: {item.phone}
+      {data.length - index}) {item.name}: {item.phone}
     </Text>
   )
 
