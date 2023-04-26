@@ -29,7 +29,7 @@ const Main = ({ navigation }) => {
   const { styles } = useStyle()
   const [persons, setPersons] = useState([])
   const [name, setName] = useState()
-  const [phone, setPhone] = useState('+7')
+  const [phone, setPhone] = useState()
   const [organization, setOrganization] = useState()
   const [post, setPost] = useState()
   const [isPlaying, setIsPlaying] = useState(false)
@@ -54,9 +54,21 @@ const Main = ({ navigation }) => {
     }
   }
 
-  const handleChange = (masked, newPhone) => {
-    setPhone(masked)
-    setPhone(newPhone)
+  const handleChange = (maskedValue, unmaskedValue) => {
+    if (unmaskedValue.length > 0 && unmaskedValue[0] === '8') {
+      setPhone(
+        '+7 ' +
+          unmaskedValue.slice(1, 4) +
+          ' ' +
+          unmaskedValue.slice(4, 7) +
+          '-' +
+          unmaskedValue.slice(7, 9) +
+          '-' +
+          unmaskedValue.slice(9, 11)
+      )
+    } else {
+      setPhone(maskedValue)
+    }
   }
 
   const handleSubmit = async () => {
@@ -114,7 +126,7 @@ const Main = ({ navigation }) => {
 
     Alert.alert('Спасибо за участие.')
     setName('')
-    setPhone('+7')
+    setPhone('')
     setOrganization('')
     setPost('')
   }
@@ -142,7 +154,7 @@ const Main = ({ navigation }) => {
           <MaskInput
             style={styles.input}
             keyboardType='numeric'
-            placeholder='Номер телефона'
+            placeholder='+7 (___) ___-__-__'
             value={phone}
             onChangeText={handleChange}
             onFocus={handleInputFocus}
