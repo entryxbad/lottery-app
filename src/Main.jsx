@@ -9,7 +9,8 @@ import {
   TouchableHighlight,
   Keyboard,
   TouchableWithoutFeedback,
-  useWindowDimensions
+  useWindowDimensions,
+  AppState
 } from 'react-native'
 import MaskInput from 'react-native-mask-input'
 import Icon from 'react-native-vector-icons/SimpleLineIcons'
@@ -34,25 +35,44 @@ const Main = ({ navigation }) => {
   const [post, setPost] = useState()
   const [isPlaying, setIsPlaying] = useState(false)
   const [isFormSubmitted, setIsFormSubmitted] = useState(false)
+  const [appState, setAppState] = useState(AppState.currentState)
+  const [isForeground, setIsForeground] = useState(true)
+
+  const handleAppStateChange = (nextAppState) => {
+    setAppState(nextAppState)
+    setIsForeground(nextAppState === 'active')
+  }
 
   useEffect(() => {
-    setTimeout(() => {
-      playSound()
-      setIsPlaying(true)
-    }, 500)
+    AppState.addEventListener('change', handleAppStateChange)
 
     return () => {
-      stopSound(setIsPlaying)
+      AppState.removeEventListener('change', handleAppStateChange)
     }
   }, [])
 
   const handlePressOnDisplay = () => {
     Keyboard.dismiss()
     console.log('first')
-    if (isPlaying) {
+    if (!isForeground && isPlaying) {
       stopSound(setIsPlaying)
     }
   }
+
+  useEffect(() => {
+    if (isForeground && navigation.isFocused()) {
+      setTimeout(() => {
+        playSound()
+        setIsPlaying(true)
+      }, 500)
+    } else if (isPlaying) {
+      stopSound(setIsPlaying)
+    }
+
+    return () => {
+      stopSound(setIsPlaying)
+    }
+  }, [isForeground, navigation.isFocused()])
 
   const handleChange = (maskedValue, unmaskedValue) => {
     if (unmaskedValue.length > 0 && unmaskedValue[0] === '8') {
