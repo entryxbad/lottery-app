@@ -72,7 +72,12 @@ const Main = ({ navigation }) => {
   }
 
   const handleSubmit = async () => {
-    if (!checkPhoneNumber(phone)) {
+    if (!name || !phone || !organization || !post) {
+      Alert.alert('Ошибка', 'Пожалуйста. Заполните все поля.')
+      return
+    }
+
+    if (!phone || !checkPhoneNumber(phone)) {
       Alert.alert('Ошибка', 'Некорректный номер телефона.')
       return
     }
@@ -92,11 +97,6 @@ const Main = ({ navigation }) => {
       phone: phone,
       organization: organization,
       post: post
-    }
-
-    if (!name || !phone || !organization || !post) {
-      Alert.alert('Ошибка', 'Пожалуйста. Заполните все поля.')
-      return
     }
 
     // Проверка наличия пользователя с таким номером телефона
