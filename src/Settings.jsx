@@ -34,7 +34,7 @@ const Settings = ({ navigation }) => {
     if (amount === '') {
       Alert.alert('Ошибка', 'Необходимо указать количество участников')
     } else if (parseInt(amount) === 0) {
-      Alert.alert('Ошибка', 'Количество участников должно быть 0.')
+      Alert.alert('Ошибка', 'Количество участников не может равняться 0.')
     } else if (parseInt(amount) < 0) {
       Alert.alert(
         'Ошибка',
