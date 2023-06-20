@@ -117,7 +117,7 @@ const useStyle = () => {
     },
     btn: {
       width: width * 0.3,
-      backgroundColor: '#4a2f26',
+      backgroundColor: '#006b7d',
       borderRadius: 10,
       alignItems: 'center',
       padding: 10,

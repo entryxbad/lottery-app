@@ -10,7 +10,8 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   useWindowDimensions,
-  AppState
+  AppState,
+  View
 } from 'react-native'
 import MaskInput from 'react-native-mask-input'
 import Icon from 'react-native-vector-icons/SimpleLineIcons'
@@ -155,13 +156,16 @@ const Main = ({ navigation }) => {
     <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
       <TouchableWithoutFeedback onPress={handlePressOnDisplay}>
         <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
-          <TouchableHighlight
-            onPress={() => {
-              stopSoundAnotherScreen()
-              navigation.navigate('Settings')
-            }}
-          >
-            <Icon style={styles.settings} name='settings' size={50}></Icon>
+          <TouchableHighlight>
+            <Icon
+              onPress={() => {
+                stopSoundAnotherScreen()
+                navigation.navigate('Settings')
+              }}
+              style={styles.settings}
+              name='settings'
+              size={70}
+            ></Icon>
           </TouchableHighlight>
           <Text style={styles.title}>Заполните поля</Text>
           <TextInput
@@ -250,7 +254,7 @@ const useStyle = () => {
     },
     btn: {
       width: width * 0.3,
-      backgroundColor: '#313131',
+      backgroundColor: '#00e0f5',
       borderRadius: 10,
       alignItems: 'center',
       padding: 10,

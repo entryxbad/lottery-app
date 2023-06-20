@@ -99,7 +99,7 @@ const useStyle = () => {
     },
     btn: {
       width: width * 0.3,
-      backgroundColor: '#a1a188',
+      backgroundColor: '#071d4f',
       borderRadius: 10,
       alignItems: 'center',
       padding: 10,
