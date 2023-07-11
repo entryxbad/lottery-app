@@ -2,14 +2,11 @@ import React, { useState, useEffect } from 'react'
 import {
   Alert,
   ImageBackground,
-  KeyboardAvoidingView,
-  StyleSheet,
   Text,
   TextInput,
   TouchableHighlight,
   Keyboard,
   TouchableWithoutFeedback,
-  useWindowDimensions,
   AppState,
   View
 } from 'react-native'
@@ -29,7 +26,6 @@ import {
 const backgroundImage = require('./assets/screens/main.jpg')
 
 const Main = ({ navigation }) => {
-  const { styles } = useStyle()
   const [persons, setPersons] = useState([])
   const [name, setName] = useState()
   const [phone, setPhone] = useState()
@@ -45,13 +41,13 @@ const Main = ({ navigation }) => {
     setIsForeground(nextAppState === 'active')
   }
 
-  useEffect(() => {
-    AppState.addEventListener('change', handleAppStateChange)
+  // useEffect(() => {
+  //   AppState.addEventListener('change', handleAppStateChange)
 
-    return () => {
-      AppState.removeEventListener('change', handleAppStateChange)
-    }
-  }, [])
+  //   return () => {
+  //     AppState.removeEventListener('change', handleAppStateChange)
+  //   }
+  // }, [])
 
   const handlePressOnDisplay = () => {
     Keyboard.dismiss()
@@ -154,30 +150,34 @@ const Main = ({ navigation }) => {
   }
 
   return (
-    <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
+    <ImageBackground
+      source={backgroundImage}
+      className='flex-1'
+      resizeMode='cover'
+    >
       <TouchableWithoutFeedback onPress={handlePressOnDisplay}>
-        <KeyboardAvoidingView className='flex-1 justify-center items-center'>
-          <TouchableHighlight>
+        <View className='flex-1 justify-center items-center'>
+          <TouchableHighlight className='absolute right-10 top-10'>
             <Icon
               onPress={() => {
                 stopSoundAnotherScreen()
                 navigation.navigate('Settings')
               }}
-              style={styles.settings}
               name='settings'
+              color='white'
               size={70}
-            ></Icon>
+            />
           </TouchableHighlight>
-          <Text style={styles.title}>Заполните поля</Text>
+          <Text className='color-white text-7xl mb-12'>Заполните поля</Text>
           <TextInput
-            style={styles.input}
+            className='bg-white rounded-xl w-[50%] py-4 text-xl mb-3'
             value={name}
             onChangeText={(newName) => setName(newName)}
             placeholder='Ваше имя'
             onFocus={handleInputFocus}
           ></TextInput>
           <MaskInput
-            style={styles.input}
+            className='bg-white rounded-xl w-[50%] py-4 text-xl mb-3'
             keyboardType='numeric'
             placeholder='+7 (___) ___-__-__'
             value={phone}
@@ -205,77 +205,29 @@ const Main = ({ navigation }) => {
             ]}
           />
           <TextInput
-            style={styles.input}
+            className='bg-white rounded-xl w-[50%] py-4 text-xl mb-3'
             value={organization}
             onChangeText={(newOrganization) => setOrganization(newOrganization)}
             placeholder='Название организации'
             onFocus={handleInputFocus}
           ></TextInput>
           <TextInput
-            style={styles.input}
+            className='bg-white rounded-xl w-[50%] py-4 text-xl mb-3'
             value={post}
             onChangeText={(newPost) => setPost(newPost)}
             placeholder='Ваша должность'
             onFocus={handleInputFocus}
           ></TextInput>
-          <TouchableHighlight style={styles.btn} onPress={handleSubmit}>
-            <Text style={styles.btnText}>Записать</Text>
+          <TouchableHighlight
+            className='bg-[#00e0f5] rounded-xl mt-8 w-[30%] items-center'
+            onPress={handleSubmit}
+          >
+            <Text className='color-white text-4xl p-4'>Записать</Text>
           </TouchableHighlight>
-        </KeyboardAvoidingView>
+        </View>
       </TouchableWithoutFeedback>
     </ImageBackground>
   )
 }
 
 export default Main
-
-const useStyle = () => {
-  const { height, width } = useWindowDimensions()
-
-  const styles = StyleSheet.create({
-    wrapper: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: width,
-      height: height
-    },
-    title: {
-      fontSize: width * 0.05,
-      marginBottom: 50,
-      color: '#fff'
-    },
-    input: {
-      backgroundColor: '#fff',
-      margin: 10,
-      borderRadius: 10,
-      width: width * 0.5,
-      height: height * 0.08,
-      fontSize: width * 0.015
-    },
-    btn: {
-      width: width * 0.3,
-      backgroundColor: '#00e0f5',
-      borderRadius: 10,
-      alignItems: 'center',
-      padding: 10,
-      marginTop: 50
-    },
-    btnText: {
-      fontSize: width * 0.03,
-      color: '#fff'
-    },
-    settings: {
-      position: 'absolute',
-      color: '#fff',
-      left: width * 0.42,
-      bottom: height * -0.02,
-      fontSize: width * 0.05
-    },
-    backgroundImage: {
-      flex: 1,
-      resizeMode: 'cover'
-    }
-  })
-  return { styles }
-}
