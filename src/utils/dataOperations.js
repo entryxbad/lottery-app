@@ -1,9 +1,13 @@
 import RNFS from 'react-native-fs'
 import { exists, readFile, writeFile } from 'react-native-fs'
 
-export const filePath = RNFS.ExternalDirectoryPath + '/data.txt'
+const day = new Date().getDate()
+const month = String(new Date().getMonth() + 1).padStart(2, '0')
+const year = new Date().getFullYear()
 
-export const loadDataFromFile = async () => {
+const filePath = RNFS.ExternalDirectoryPath + `/${day}.${month}.${year}.txt`
+
+const loadDataFromFile = async () => {
   const fileExists = await exists(filePath)
   if (fileExists) {
     const contents = await readFile(filePath, 'utf8')
@@ -12,6 +16,8 @@ export const loadDataFromFile = async () => {
   return []
 }
 
-export const saveDataToFile = async (data) => {
+const saveDataToFile = async (data) => {
   await writeFile(filePath, JSON.stringify(data))
 }
+
+export { filePath, loadDataFromFile, saveDataToFile }

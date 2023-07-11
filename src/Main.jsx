@@ -41,17 +41,16 @@ const Main = ({ navigation }) => {
     setIsForeground(nextAppState === 'active')
   }
 
-  // useEffect(() => {
-  //   AppState.addEventListener('change', handleAppStateChange)
+  useEffect(() => {
+    AppState.addEventListener('change', handleAppStateChange)
 
-  //   return () => {
-  //     AppState.removeEventListener('change', handleAppStateChange)
-  //   }
-  // }, [])
+    return () => {
+      AppState.removeEventListener('change', handleAppStateChange)
+    }
+  }, [])
 
   const handlePressOnDisplay = () => {
     Keyboard.dismiss()
-    console.log('first')
     if (!isForeground && isPlaying) {
       stopSound(setIsPlaying)
     }
