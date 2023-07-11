@@ -13,6 +13,7 @@ import {
   AppState,
   View
 } from 'react-native'
+
 import MaskInput from 'react-native-mask-input'
 import Icon from 'react-native-vector-icons/SimpleLineIcons'
 import { checkPhoneNumber, checkPersonExists } from './utils/functions'
@@ -155,7 +156,7 @@ const Main = ({ navigation }) => {
   return (
     <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
       <TouchableWithoutFeedback onPress={handlePressOnDisplay}>
-        <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
+        <KeyboardAvoidingView className='flex-1 justify-center items-center'>
           <TouchableHighlight>
             <Icon
               onPress={() => {
