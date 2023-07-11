@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import {
-  StyleSheet,
   Text,
   View,
   TouchableOpacity,
-  useWindowDimensions,
   ImageBackground,
-  KeyboardAvoidingView,
   TextInput,
   Alert,
   TouchableWithoutFeedback,
@@ -18,7 +15,6 @@ import { filePath } from './utils/dataOperations'
 const backgroundImage = require('./assets/screens/settings.jpg')
 
 const Settings = ({ navigation }) => {
-  const { styles } = useStyle()
   const [regAmount, setRegAmount] = useState('')
   const [amount, setAmount] = useState('')
 
@@ -56,22 +52,33 @@ const Settings = ({ navigation }) => {
   }
 
   return (
-    <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
-      <View style={styles.wrapper}>
+    <ImageBackground
+      source={backgroundImage}
+      className='flex-1'
+      resizeMode='cover'
+    >
+      <View className='flex-1 items-center justify-center'>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-          <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
-            <Text style={styles.title}>Введите количество победителей</Text>
-            <Text style={styles.text}>Всего участников: {regAmount}</Text>
+          <View className='items-center'>
+            <Text className='text-white text-5xl mb-12'>
+              Введите количество победителей
+            </Text>
+            <Text className='text-white text-4xl mt-12'>
+              Всего участников: {regAmount}
+            </Text>
             <TextInput
-              style={styles.input}
+              className='bg-white rounded-xl m-3 text-center text-3xl w-16'
               value={amount}
               keyboardType='numeric'
               onChangeText={handleNameInput}
             />
-            <TouchableOpacity style={styles.btn} onPress={handleSave}>
-              <Text style={styles.btnText}>Сохранить</Text>
+            <TouchableOpacity
+              className='bg-[#071d4f] rounded-xl p-3 mt-12 w-96 items-center'
+              onPress={handleSave}
+            >
+              <Text className='text-white text-4xl p-1'>Сохранить</Text>
             </TouchableOpacity>
-          </KeyboardAvoidingView>
+          </View>
         </TouchableWithoutFeedback>
       </View>
     </ImageBackground>
@@ -79,55 +86,3 @@ const Settings = ({ navigation }) => {
 }
 
 export default Settings
-
-const useStyle = () => {
-  const { height, width } = useWindowDimensions()
-
-  const styles = StyleSheet.create({
-    wrapper: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: width,
-      height: height,
-      backgroundColor: 'rgba(0,0,0,0.3)'
-    },
-    title: {
-      fontSize: width * 0.04,
-      marginBottom: 50,
-      color: '#fff'
-    },
-    btn: {
-      width: width * 0.3,
-      backgroundColor: '#071d4f',
-      borderRadius: 10,
-      alignItems: 'center',
-      padding: 10,
-      marginTop: 50
-    },
-    btnText: {
-      fontSize: width * 0.03,
-      color: '#fff'
-    },
-    text: {
-      fontSize: width * 0.028,
-      color: '#fff',
-      marginTop: 50
-    },
-    input: {
-      backgroundColor: '#fff',
-      margin: 10,
-      borderRadius: 10,
-      width: width * 0.05,
-      height: height * 0.1,
-      backgroundColor: '#d9d9db',
-      textAlign: 'center',
-      fontSize: height * 0.05
-    },
-    backgroundImage: {
-      flex: 1,
-      resizeMode: 'cover'
-    }
-  })
-  return { styles }
-}
