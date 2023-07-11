@@ -156,7 +156,7 @@ const Main = ({ navigation }) => {
       resizeMode='cover'
     >
       <TouchableWithoutFeedback onPress={handlePressOnDisplay}>
-        <View className='flex-1 justify-center items-center'>
+        <View className='flex-1 justify-center items-center bg-backgroundShadow'>
           <TouchableHighlight className='absolute right-10 top-10'>
             <Icon
               onPress={() => {

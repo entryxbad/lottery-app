@@ -57,7 +57,7 @@ const Settings = ({ navigation }) => {
       className='flex-1'
       resizeMode='cover'
     >
-      <View className='flex-1 items-center justify-center'>
+      <View className='flex-1 items-center justify-center bg-backgroundShadow'>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View className='items-center'>
             <Text className='text-white text-5xl mb-12'>

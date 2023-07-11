@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import {
-  StyleSheet,
   Text,
   View,
-  useWindowDimensions,
   TouchableOpacity,
   ImageBackground,
   FlatList,
@@ -16,7 +14,6 @@ import { filePath } from './utils/dataOperations'
 const backgroundImage = require('./assets/screens/winner.jpg')
 
 const Winner = ({ route }) => {
-  const { styles } = useStyle()
   const [data, setData] = useState([])
   const [isButtonVisible, setIsButtonVisible] = useState(true)
   const [isConfettiPlaying, setIsConfettiPlaying] = useState(false)
@@ -63,30 +60,37 @@ const Winner = ({ route }) => {
   }, [isConfettiPlaying])
 
   const renderItem = ({ item, index }) => (
-    <Text style={styles.text} key={item.phone}>
+    <Text className='text-white text-4xl pt-12' key={item.phone}>
       {data.length - index}) {item.name}: {item.phone}
     </Text>
   )
 
   return (
-    <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
-      <View style={styles.wrapper}>
+    <ImageBackground
+      source={backgroundImage}
+      className='flex-1'
+      resizeMode='cover'
+    >
+      <View className='flex-1 items-center justify-center bg-backgroundShadow'>
         {isButtonVisible && (
-          <TouchableOpacity style={styles.btn} onPress={getRandom}>
-            <Text style={styles.btnText}>Разыграть</Text>
+          <TouchableOpacity
+            className='bg-[#006b7d] rounded-xl w-96 items-center'
+            onPress={getRandom}
+          >
+            <Text className='text-white text-4xl py-5'>Разыграть</Text>
           </TouchableOpacity>
         )}
         <Confetti ref={confettiRef} />
         {data.length > 0 && (
-          <View style={styles.wrapper}>
-            <Text style={styles.title}>Поздравляем победителей!</Text>
+          <View className='flex-1 items-center'>
+            <Text className='text-white text-6xl pt-12'>
+              Поздравляем победителей!
+            </Text>
             <FlatList
               data={data}
               keyExtractor={(item) => item.phone.toString()}
               renderItem={renderItem}
-              ListFooterComponent={
-                <View style={{ height: 20, paddingBottom: 30 }} />
-              }
+              ListFooterComponent={<View className='h-5 pb-8' />}
             />
           </View>
         )}
@@ -96,53 +100,3 @@ const Winner = ({ route }) => {
 }
 
 export default Winner
-
-const useStyle = () => {
-  const { height, width } = useWindowDimensions()
-
-  const styles = StyleSheet.create({
-    wrapper: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: width,
-      height: height,
-      backgroundColor: 'rgba(0,0,0,0.3)'
-    },
-    title: {
-      textAlign: 'center',
-      fontSize: width * 0.04,
-      paddingTop: 20,
-      color: '#fff'
-    },
-    btn: {
-      width: width * 0.3,
-      backgroundColor: '#006b7d',
-      borderRadius: 10,
-      alignItems: 'center',
-      padding: 10,
-      marginTop: 10
-    },
-    btnText: {
-      fontSize: width * 0.03,
-      color: '#fff'
-    },
-    text: {
-      textAlign: 'left',
-      fontSize: width * 0.028,
-      color: '#fff',
-      paddingTop: 50
-    },
-    input: {
-      backgroundColor: '#fff',
-      margin: 10,
-      borderRadius: 10,
-      width: width * 0.5
-    },
-    backgroundImage: {
-      flex: 1,
-      resizeMode: 'cover'
-    }
-  })
-  return { styles }
-}
