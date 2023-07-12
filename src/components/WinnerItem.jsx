@@ -3,7 +3,7 @@ import { Text } from 'react-native'
 
 const WinnerItem = ({ item, index }) => (
   // Отображение списка участников
-  <Text className='text-white text-4xl pt-12' key={item.phone}>
+  <Text className='text-white text-4xl pt-12' key={item.index}>
     {index + 1}) {item.name}: {item.phone}
   </Text>
 )

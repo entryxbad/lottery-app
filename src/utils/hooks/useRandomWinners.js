@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import RNFS from 'react-native-fs'
-import { filePath } from './dataOperations'
+import { filePath } from '../dataOperations'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { Alert } from 'react-native'
+import { Alert, BackHandler } from 'react-native'
 
 const useRandomWinners = () => {
   const [regAmount, setRegAmount] = useState(0)
@@ -11,6 +11,19 @@ const useRandomWinners = () => {
   const [isConfettiPlaying, setIsConfettiPlaying] = useState(false)
   const [selectedWinners, setSelectedWinners] = useState([])
   const confettiRef = useRef(null)
+
+  const onBackButtonPress = () => {
+    if (isConfettiPlaying) {
+      return true // не вернётся назад пока проигрывается анимация
+    }
+    return false // можно выйти по кнопке "назад" после анимации
+  }
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', onBackButtonPress)
+    return () =>
+      BackHandler.removeEventListener('hardwareBackPress', onBackButtonPress)
+  }, [isConfettiPlaying])
 
   // Получение общего количества участников
   useEffect(() => {
@@ -89,7 +102,6 @@ const useRandomWinners = () => {
     setAmount,
     getRandomWinners,
     winners,
-    isConfettiPlaying,
     confettiRef,
     regAmount
   }

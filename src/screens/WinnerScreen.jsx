@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react'
 import {
   Text,
   TextInput,
@@ -6,12 +5,11 @@ import {
   TouchableOpacity,
   ImageBackground,
   FlatList,
-  BackHandler,
   Keyboard,
   TouchableWithoutFeedback
 } from 'react-native'
 import Confetti from 'react-native-confetti'
-import { useRandomWinners } from '../utils/hooks'
+import { useRandomWinners } from '../utils/hooks/useRandomWinners'
 import WinnerItem from '../components/WinnerItem'
 
 const backgroundImage = require('../assets/screens/winner.jpg')
@@ -22,23 +20,9 @@ const WinnerScreen = () => {
     setAmount,
     getRandomWinners,
     winners,
-    isConfettiPlaying,
     confettiRef,
     regAmount
   } = useRandomWinners()
-
-  const onBackButtonPress = () => {
-    if (isConfettiPlaying) {
-      return true // не вернётся назад пока проигрывается анимация
-    }
-    return false // можно выйти по кнопке "назад" после анимации
-  }
-
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', onBackButtonPress)
-    return () =>
-      BackHandler.removeEventListener('hardwareBackPress', onBackButtonPress)
-  }, [isConfettiPlaying])
 
   return (
     <ImageBackground
