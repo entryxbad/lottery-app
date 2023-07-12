@@ -110,6 +110,7 @@ const MainScreen = ({ navigation }) => {
     })
 
     const newPerson = {
+      id: persons.length,
       name: name,
       phone: phone,
       organization: organization,
