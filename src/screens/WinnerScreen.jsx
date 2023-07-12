@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import {
   Text,
   TextInput,
@@ -7,96 +7,25 @@ import {
   ImageBackground,
   FlatList,
   BackHandler,
-  Alert,
   Keyboard,
   TouchableWithoutFeedback
 } from 'react-native'
 import Confetti from 'react-native-confetti'
-import RNFS from 'react-native-fs'
-import { filePath } from '../utils/dataOperations'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useRandomWinners } from '../utils/hooks'
+import WinnerItem from '../components/WinnerItem'
 
 const backgroundImage = require('../assets/screens/winner.jpg')
 
 const WinnerScreen = () => {
-  const [regAmount, setRegAmount] = useState(0)
-  const [amount, setAmount] = useState('')
-  const [winners, setWinners] = useState([])
-  const [isConfettiPlaying, setIsConfettiPlaying] = useState(false)
-  const confettiRef = useRef(null)
-  const [selectedWinners, setSelectedWinners] = useState([])
-
-  // Получение общего количества участников
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = JSON.parse(await RNFS.readFile(filePath))
-      setRegAmount(data.length)
-    }
-    fetchData()
-  }, [])
-
-  const getRandomWinners = async () => {
-    // Функция getRandomWinners выполняется при нажатии на кнопку "Разыграть".
-
-    if (amount === '') {
-      Alert.alert('Ошибка', 'Необходимо указать количество победителей')
-      return
-    }
-    // Сначала проверяется, указано ли количество победителей. Если не указано, выводится сообщение об ошибке.
-
-    const data = JSON.parse(await RNFS.readFile(filePath))
-
-    if (data.length < parseInt(amount)) {
-      Alert.alert(
-        'Ошибка',
-        'Количество победителей не может быть больше количества участников.'
-      )
-      return
-    }
-    // Затем читаются данные участников из файла. Если количество победителей превышает общее количество участников, выводится сообщение об ошибке.
-
-    const selectedWinnersFromStorage = await AsyncStorage.getItem(
-      'selectedWinners'
-    )
-    const prevSelectedWinners = selectedWinnersFromStorage
-      ? JSON.parse(selectedWinnersFromStorage)
-      : []
-    // Загружаются предыдущие выбранные победители из хранилища.
-
-    const remainingData = data.filter(
-      (item) =>
-        !prevSelectedWinners.some(
-          (prevWinner) =>
-            prevWinner.name === item.name && prevWinner.phone === item.phone
-        )
-    )
-    // Фильтруются данные участников, исключая тех, кто уже выбран в предыдущих розыгрышах.
-
-    if (remainingData.length === 0) {
-      Alert.alert('Внимание', 'Участников, не принимавших участия, не осталось')
-      return
-    }
-    // Если остались участники для выбора, они перемешиваются и выбираются указанное количество победителей.
-
-    const shuffledData = [...remainingData].sort(() => Math.random() - 0.5)
-    const selectedWinners = shuffledData.slice(0, parseInt(amount))
-
-    setIsConfettiPlaying(true)
-    confettiRef.current.startConfetti()
-    setTimeout(() => {
-      confettiRef.current.stopConfetti()
-      setIsConfettiPlaying(false)
-    }, 1000)
-    // Включается анимация конфетти на заданное время.
-
-    setWinners(selectedWinners)
-    setSelectedWinners([...prevSelectedWinners, ...selectedWinners])
-    await AsyncStorage.setItem(
-      'selectedWinners',
-      JSON.stringify([...prevSelectedWinners, ...selectedWinners])
-    )
-    // Обновляются состояния winners и selectedWinners, сохраняются данные в хранилище.
-  }
+  const {
+    amount,
+    setAmount,
+    getRandomWinners,
+    winners,
+    isConfettiPlaying,
+    confettiRef,
+    regAmount
+  } = useRandomWinners()
 
   const onBackButtonPress = () => {
     if (isConfettiPlaying) {
@@ -110,13 +39,6 @@ const WinnerScreen = () => {
     return () =>
       BackHandler.removeEventListener('hardwareBackPress', onBackButtonPress)
   }, [isConfettiPlaying])
-
-  // Отображение списка участников
-  const renderItem = ({ item, index }) => (
-    <Text className='text-white text-4xl pt-12' key={item.phone}>
-      {index + 1}) {item.name}: {item.phone}
-    </Text>
-  )
 
   return (
     <ImageBackground
@@ -156,7 +78,9 @@ const WinnerScreen = () => {
               <FlatList
                 data={winners}
                 keyExtractor={(item) => item.phone.toString()}
-                renderItem={renderItem}
+                renderItem={({ item, index }) => (
+                  <WinnerItem item={item} index={index} />
+                )}
                 ListFooterComponent={<View className='h-5 pb-8' />}
               />
             </View>
