@@ -1,49 +1,90 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
   Text,
+  TextInput,
   View,
   TouchableOpacity,
   ImageBackground,
   FlatList,
-  BackHandler
+  BackHandler,
+  Alert,
+  Keyboard,
+  TouchableWithoutFeedback
 } from 'react-native'
 import Confetti from 'react-native-confetti'
 import RNFS from 'react-native-fs'
 import { filePath } from '../utils/dataOperations'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const backgroundImage = require('../assets/screens/winner.jpg')
 
-const WinnerScreen = ({ route }) => {
-  const [data, setData] = useState([])
-  const [isButtonVisible, setIsButtonVisible] = useState(true)
+const WinnerScreen = () => {
+  const [regAmount, setRegAmount] = useState(0)
+  const [amount, setAmount] = useState('')
+  const [winners, setWinners] = useState([])
   const [isConfettiPlaying, setIsConfettiPlaying] = useState(false)
   const confettiRef = useRef(null)
-  const { amount } = route.params
+  const [selectedWinners, setSelectedWinners] = useState([])
 
-  // Функция получения случайных победителей
-  const getRandom = async () => {
-    setIsButtonVisible(false)
+  // Получение общего количества участников
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = JSON.parse(await RNFS.readFile(filePath))
+      setRegAmount(data.length)
+    }
+    fetchData()
+  }, [])
+
+  const getRandomWinners = async () => {
+    if (amount === '') {
+      Alert.alert('Ошибка', 'Необходимо указать количество победителей')
+      return
+    }
+
     const data = JSON.parse(await RNFS.readFile(filePath))
 
-    let result = []
-
-    while (result.length != amount) {
-      const random = Math.floor(Math.random() * data.length)
-      result.push(data[random])
-      result = result.filter((v, i, arr) => arr.indexOf(v) == i)
+    if (data.length < parseInt(amount)) {
+      Alert.alert(
+        'Ошибка',
+        'Количество победителей не может быть больше количества участников.'
+      )
+      return
     }
 
-    if (confettiRef.current) {
-      setIsConfettiPlaying(true)
-      confettiRef.current.startConfetti()
-      setTimeout(() => {
-        confettiRef.current.stopConfetti()
-        setIsConfettiPlaying(false)
-      }, 10000)
+    const selectedWinnersFromStorage = await AsyncStorage.getItem(
+      'selectedWinners'
+    )
+    const prevSelectedWinners = selectedWinnersFromStorage
+      ? JSON.parse(selectedWinnersFromStorage)
+      : []
+    const remainingData = data.filter(
+      (item) =>
+        !prevSelectedWinners.some(
+          (prevWinner) => prevWinner.phone === item.phone
+        )
+    )
+
+    if (remainingData.length === 0) {
+      Alert.alert('Внимание', 'Участников, не принимавших участия, не осталось')
+      return
     }
 
-    setData(result)
-    return result
+    const shuffledData = [...remainingData].sort(() => Math.random() - 0.5)
+    const selectedWinners = shuffledData.slice(0, parseInt(amount))
+
+    setIsConfettiPlaying(true)
+    confettiRef.current.startConfetti()
+    setTimeout(() => {
+      confettiRef.current.stopConfetti()
+      setIsConfettiPlaying(false)
+    }, 1000)
+
+    setWinners(selectedWinners)
+    setSelectedWinners([...prevSelectedWinners, ...selectedWinners])
+    await AsyncStorage.setItem(
+      'selectedWinners',
+      JSON.stringify([...prevSelectedWinners, ...selectedWinners])
+    )
   }
 
   const onBackButtonPress = () => {
@@ -59,9 +100,10 @@ const WinnerScreen = ({ route }) => {
       BackHandler.removeEventListener('hardwareBackPress', onBackButtonPress)
   }, [isConfettiPlaying])
 
+  // Отображение списка участников
   const renderItem = ({ item, index }) => (
     <Text className='text-white text-4xl pt-12' key={item.phone}>
-      {data.length - index}) {item.name}: {item.phone}
+      {index + 1}) {item.name}: {item.phone}
     </Text>
   )
 
@@ -71,30 +113,46 @@ const WinnerScreen = ({ route }) => {
       className='flex-1'
       resizeMode='cover'
     >
-      <View className='flex-1 items-center justify-center bg-backgroundShadow'>
-        {isButtonVisible && (
-          <TouchableOpacity
-            className='bg-[#006b7d] rounded-xl w-96 items-center'
-            onPress={getRandom}
-          >
-            <Text className='text-white text-4xl py-5'>Разыграть</Text>
-          </TouchableOpacity>
-        )}
-        <Confetti ref={confettiRef} />
-        {data.length > 0 && (
-          <View className='flex-1 items-center'>
-            <Text className='text-white text-6xl pt-12'>
-              Поздравляем победителей!
-            </Text>
-            <FlatList
-              data={data}
-              keyExtractor={(item) => item.phone.toString()}
-              renderItem={renderItem}
-              ListFooterComponent={<View className='h-5 pb-8' />}
-            />
-          </View>
-        )}
-      </View>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View className='flex-1 items-center justify-center bg-backgroundShadow'>
+          {winners.length === 0 && (
+            <View className='items-center'>
+              <Text className='text-white text-5xl mb-12'>
+                Введите количество победителей
+              </Text>
+              <Text className='text-white text-4xl mt-12'>
+                Всего участников: {regAmount}
+              </Text>
+              <TextInput
+                className='bg-white rounded-xl m-3 text-center text-3xl w-16'
+                value={amount}
+                keyboardType='numeric'
+                onChangeText={setAmount}
+              />
+              <TouchableOpacity
+                className='bg-[#071d4f] rounded-xl p-3 mt-12 w-96 items-center'
+                onPress={getRandomWinners}
+              >
+                <Text className='text-white text-4xl p-1'>Разыграть</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          {winners.length > 0 && (
+            <View className='flex-1 items-center'>
+              <Text className='text-white text-6xl pt-12'>
+                Поздравляем победителей!
+              </Text>
+              <FlatList
+                data={winners}
+                keyExtractor={(item) => item.phone.toString()}
+                renderItem={renderItem}
+                ListFooterComponent={<View className='h-5 pb-8' />}
+              />
+            </View>
+          )}
+          <Confetti ref={confettiRef} />
+        </View>
+      </TouchableWithoutFeedback>
     </ImageBackground>
   )
 }

@@ -12,7 +12,8 @@ import {
 } from 'react-native'
 
 import MaskInput from 'react-native-mask-input'
-import Icon from 'react-native-vector-icons/SimpleLineIcons'
+import SettingsIcon from 'react-native-vector-icons/SimpleLineIcons'
+import AwardIcon from 'react-native-vector-icons/FontAwesome5'
 import { checkPhoneNumber, checkPersonExists } from '../utils/functions'
 import { saveDataToFile, loadDataFromFile } from '../utils/dataOperations'
 import {
@@ -158,7 +159,18 @@ const MainScreen = ({ navigation }) => {
       <TouchableWithoutFeedback onPress={handlePressOnDisplay}>
         <View className='flex-1 justify-center items-center bg-backgroundShadow'>
           <TouchableHighlight className='absolute right-10 top-10'>
-            <Icon
+            <AwardIcon
+              onPress={() => {
+                stopSoundAnotherScreen()
+                navigation.navigate('Winner')
+              }}
+              name='award'
+              color='white'
+              size={70}
+            />
+          </TouchableHighlight>
+          <TouchableHighlight className='absolute left-10 top-10'>
+            <SettingsIcon
               onPress={() => {
                 stopSoundAnotherScreen()
                 navigation.navigate('Settings')
