@@ -13,12 +13,12 @@ import {
 } from 'react-native'
 import Confetti from 'react-native-confetti'
 import RNFS from 'react-native-fs'
-import { filePath } from './utils/dataOperations'
+import { filePath } from '../utils/dataOperations'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const backgroundImage = require('./assets/screens/winner.jpg')
+const backgroundImage = require('../assets/screens/winner.jpg')
 
-const Settings = () => {
+const SettingsScreen = () => {
   const [regAmount, setRegAmount] = useState(0)
   const [amount, setAmount] = useState('')
   const [winners, setWinners] = useState([])
@@ -26,6 +26,7 @@ const Settings = () => {
   const confettiRef = useRef(null)
   const [selectedWinners, setSelectedWinners] = useState([])
 
+  // Получение общего количества участников
   useEffect(() => {
     const fetchData = async () => {
       const data = JSON.parse(await RNFS.readFile(filePath))
@@ -99,6 +100,7 @@ const Settings = () => {
       BackHandler.removeEventListener('hardwareBackPress', onBackButtonPress)
   }, [isConfettiPlaying])
 
+  // Отображение списка участников
   const renderItem = ({ item, index }) => (
     <Text className='text-white text-4xl pt-12' key={item.phone}>
       {index + 1}) {item.name}: {item.phone}
@@ -155,4 +157,4 @@ const Settings = () => {
   )
 }
 
-export default Settings
+export default SettingsScreen

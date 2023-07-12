@@ -9,11 +9,11 @@ import {
 } from 'react-native'
 import Confetti from 'react-native-confetti'
 import RNFS from 'react-native-fs'
-import { filePath } from './utils/dataOperations'
+import { filePath } from '../utils/dataOperations'
 
-const backgroundImage = require('./assets/screens/winner.jpg')
+const backgroundImage = require('../assets/screens/winner.jpg')
 
-const Winner = ({ route }) => {
+const WinnerScreen = ({ route }) => {
   const [data, setData] = useState([])
   const [isButtonVisible, setIsButtonVisible] = useState(true)
   const [isConfettiPlaying, setIsConfettiPlaying] = useState(false)
@@ -99,4 +99,4 @@ const Winner = ({ route }) => {
   )
 }
 
-export default Winner
+export default WinnerScreen

@@ -1,9 +1,9 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import Main from './src/Main'
-import Settings from './src/Settings'
-import Winner from './src/Winner'
+import MainScreen from './src/screens/MainScreen'
+import SettingsScreen from './src/screens/SettingsScreen'
+import WinnerScreen from './src/screens/WinnerScreen'
 
 const Stack = createNativeStackNavigator()
 
@@ -14,9 +14,9 @@ const App = () => {
         initialRouteName='Home'
         screenOptions={{ headerShown: false }}
       >
-        <Stack.Screen name='Home' component={Main} />
-        <Stack.Screen name='Settings' component={Settings} />
-        <Stack.Screen name='Winner' component={Winner} />
+        <Stack.Screen name='Home' component={MainScreen} />
+        <Stack.Screen name='Settings' component={SettingsScreen} />
+        <Stack.Screen name='Winner' component={WinnerScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )

@@ -13,19 +13,19 @@ import {
 
 import MaskInput from 'react-native-mask-input'
 import Icon from 'react-native-vector-icons/SimpleLineIcons'
-import { checkPhoneNumber, checkPersonExists } from './utils/functions'
-import { saveDataToFile, loadDataFromFile } from './utils/dataOperations'
+import { checkPhoneNumber, checkPersonExists } from '../utils/functions'
+import { saveDataToFile, loadDataFromFile } from '../utils/dataOperations'
 import {
   handleInputFocus,
   playSound,
   playThanksSound,
   stopSound,
   stopSoundAnotherScreen
-} from './utils/player'
+} from '../utils/player'
 
-const backgroundImage = require('./assets/screens/main.jpg')
+const backgroundImage = require('../assets/screens/main.jpg')
 
-const Main = ({ navigation }) => {
+const MainScreen = ({ navigation }) => {
   const [persons, setPersons] = useState([])
   const [name, setName] = useState()
   const [phone, setPhone] = useState()
@@ -229,4 +229,4 @@ const Main = ({ navigation }) => {
   )
 }
 
-export default Main
+export default MainScreen
