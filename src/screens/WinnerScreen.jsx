@@ -36,10 +36,13 @@ const WinnerScreen = () => {
   }, [])
 
   const getRandomWinners = async () => {
+    // Функция getRandomWinners выполняется при нажатии на кнопку "Разыграть".
+
     if (amount === '') {
       Alert.alert('Ошибка', 'Необходимо указать количество победителей')
       return
     }
+    // Сначала проверяется, указано ли количество победителей. Если не указано, выводится сообщение об ошибке.
 
     const data = JSON.parse(await RNFS.readFile(filePath))
 
@@ -50,6 +53,7 @@ const WinnerScreen = () => {
       )
       return
     }
+    // Затем читаются данные участников из файла. Если количество победителей превышает общее количество участников, выводится сообщение об ошибке.
 
     const selectedWinnersFromStorage = await AsyncStorage.getItem(
       'selectedWinners'
@@ -57,6 +61,8 @@ const WinnerScreen = () => {
     const prevSelectedWinners = selectedWinnersFromStorage
       ? JSON.parse(selectedWinnersFromStorage)
       : []
+    // Загружаются предыдущие выбранные победители из хранилища.
+
     const remainingData = data.filter(
       (item) =>
         !prevSelectedWinners.some(
@@ -64,11 +70,13 @@ const WinnerScreen = () => {
             prevWinner.name === item.name && prevWinner.phone === item.phone
         )
     )
+    // Фильтруются данные участников, исключая тех, кто уже выбран в предыдущих розыгрышах.
 
     if (remainingData.length === 0) {
       Alert.alert('Внимание', 'Участников, не принимавших участия, не осталось')
       return
     }
+    // Если остались участники для выбора, они перемешиваются и выбираются указанное количество победителей.
 
     const shuffledData = [...remainingData].sort(() => Math.random() - 0.5)
     const selectedWinners = shuffledData.slice(0, parseInt(amount))
@@ -79,6 +87,7 @@ const WinnerScreen = () => {
       confettiRef.current.stopConfetti()
       setIsConfettiPlaying(false)
     }, 1000)
+    // Включается анимация конфетти на заданное время.
 
     setWinners(selectedWinners)
     setSelectedWinners([...prevSelectedWinners, ...selectedWinners])
@@ -86,6 +95,7 @@ const WinnerScreen = () => {
       'selectedWinners',
       JSON.stringify([...prevSelectedWinners, ...selectedWinners])
     )
+    // Обновляются состояния winners и selectedWinners, сохраняются данные в хранилище.
   }
 
   const onBackButtonPress = () => {
