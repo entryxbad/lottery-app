@@ -60,7 +60,8 @@ const WinnerScreen = () => {
     const remainingData = data.filter(
       (item) =>
         !prevSelectedWinners.some(
-          (prevWinner) => prevWinner.phone === item.phone
+          (prevWinner) =>
+            prevWinner.name === item.name && prevWinner.phone === item.phone
         )
     )
 
